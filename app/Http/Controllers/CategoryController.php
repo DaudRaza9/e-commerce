@@ -37,6 +37,7 @@ class CategoryController extends Controller
         }
         $category->category_name=$request->post('category_name');
         $category->category_slug=$request->post('category_slug');
+        $category->status=1;
         $category->save();
         $request->session()->flash('message',$msg);
         return redirect('admin/category');
@@ -61,5 +62,12 @@ class CategoryController extends Controller
             $result['id']=0;
         }
         return view('admin.category.manageCategory',$result);
+    }
+    public function status(Request $request,$status,$id){
+        $category = Category::findorfail($id);
+        $category->status=$status;
+        $category->save();
+        $request->session()->flash('message','Category status updated');
+        return redirect('admin/category');
     }
 }

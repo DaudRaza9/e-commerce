@@ -1,6 +1,6 @@
 @extends('admin.layout')
-@section('page_title','Category')
-@section('category_select','active')
+@section('page_title','Product')
+@section('product_select','active')
 @section('container')
 
     @if(session()->has('message'))
@@ -11,9 +11,9 @@
         </button>
     </div>
     @endif
-    <h3>Category</h3>
-    <a href="{{route('admin.category.manage_category')}}">
-        <button type="button" class="btn btn-success mt-3">Add Category</button>
+    <h3>Products</h3>
+    <a href="{{route('admin.product.manage_product')}}">
+        <button type="button" class="btn btn-success mt-3">Add Product</button>
     </a>
     <div class="row m-t-30">
         <div class="col-md-12">
@@ -23,8 +23,8 @@
                     <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Category Name</th>
-                        <th>Category Slug</th>
+                        <th>Name</th>
+                        <th>Slug</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -32,22 +32,22 @@
                     @foreach($data as $list)
                         <tr>
                             <td>{{$list->id}}</td>
-                            <td>{{$list->category_name}}</td>
-                            <td>{{$list->category_slug}}</td>
+                            <td>{{$list->name}}</td>
+                            <td>{{$list->slug}}</td>
                             <td>
-                                <a href="{{route('admin.category.edit',$list->id)}}">
+                                <a href="{{route('admin.product.edit',$list->id)}}">
                                     <button type="button" class="btn btn-success">Edit</button>
                                 </a>
                                 @if($list->status==1)
-                                    <a href="{{route('admin.category.status',['status' => 0,'id'=>$list->id])}}">
+                                    <a href="{{route('admin.product.status',['status' => 0,'id'=>$list->id])}}">
                                         <button type="button" class="btn btn-info">Active</button>
                                     </a>
                                 @elseif($list->status==0)
-                                    <a href="{{route('admin.category.status',['status' => 1,'id'=>$list->id])}}">
+                                    <a href="{{route('admin.product.status',['status' => 1,'id'=>$list->id])}}">
                                         <button type="button" class="btn btn-warning">DeActive</button>
                                     </a>
                                 @endif
-                                <a href="{{route('admin.category.delete',$list->id)}}">
+                                <a href="{{route('admin.product.delete',$list->id)}}">
                                     <button type="button" class="btn btn-danger">Delete</button>
                                 </a>
                             </td>

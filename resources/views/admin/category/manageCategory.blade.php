@@ -1,5 +1,6 @@
 @extends('admin.layout')
 @section('page_title','Manage Category')
+@section('coupon_select','active')
 @section('container')
 
 

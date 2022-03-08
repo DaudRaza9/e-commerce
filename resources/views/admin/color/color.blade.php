@@ -1,6 +1,6 @@
 @extends('admin.layout')
-@section('page_title','Coupon')
-@section('coupon_select','active')
+@section('page_title','Color')
+@section('color_select','active')
 @section('container')
 
     @if(session()->has('message'))
@@ -11,9 +11,9 @@
             </button>
         </div>
     @endif
-    <h3>Coupon</h3>
-     <a href="{{route('admin.coupon.manage_coupon')}}">
-         <button type="button" class="btn btn-success mt-3">Add Coupon</button>
+    <h3>Size</h3>
+     <a href="{{route('admin.color.manage_color')}}">
+         <button type="button" class="btn btn-success mt-3">Add Color</button>
      </a>
     <div class="row m-t-30">
         <div class="col-md-12">
@@ -23,9 +23,7 @@
                     <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Title</th>
-                        <th>Code</th>
-                        <th>Value</th>
+                        <th>Color</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -33,17 +31,15 @@
                     @foreach($data as $list)
                     <tr>
                         <td>{{$list->id}}</td>
-                        <td>{{$list->title}}</td>
-                        <td>{{$list->code}}</td>
-                        <td>{{$list->value}}</td>
+                        <td>{{$list->color}}</td>
                         <td>
-                            <a href="{{route('admin.coupon.edit',$list->id)}}"><button type="button" class="btn btn-success">Edit</button></a>
+                            <a href="{{route('admin.color.edit',$list->id)}}"><button type="button" class="btn btn-success">Edit</button></a>
                             @if($list->status==1)
-                                <a href="{{route('admin.coupon.status',['status' => 0,'id'=>$list->id])}}"><button type="button" class="btn btn-info">Active</button></a>
+                            <a href="{{route('admin.color.status',['status' => 0,'id'=>$list->id])}}"><button type="button" class="btn btn-info">Active</button></a>
                             @elseif($list->status==0)
-                                <a href="{{route('admin.coupon.status',['status' => 1,'id'=>$list->id])}}"><button type="button" class="btn btn-warning">DeActive</button></a>
+                            <a href="{{route('admin.color.status',['status' => 1,'id'=>$list->id])}}"><button type="button" class="btn btn-warning">DeActive</button></a>
                             @endif
-                            <a href="{{route('admin.coupon.delete',$list->id)}}"><button type="button" class="btn btn-danger">Delete</button></a>
+                            <a href="{{route('admin.color.delete',$list->id)}}"><button type="button" class="btn btn-danger">Delete</button></a>
                         </td>
 
                     </tr>

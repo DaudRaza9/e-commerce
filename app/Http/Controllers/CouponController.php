@@ -66,4 +66,11 @@ class CouponController extends Controller
         }
         return view('admin.coupon.manageCoupon',$result);
     }
+    public function status(Request $request,$status,$id){
+        $category = Coupon::findorfail($id);
+        $category->status=$status;
+        $category->save();
+        $request->session()->flash('message','Coupon Status updated');
+        return redirect('admin/coupon');
+    }
 }

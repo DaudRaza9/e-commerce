@@ -1,19 +1,19 @@
 @extends('admin.layout')
-@section('page_title','Category')
-@section('category_select','active')
+@section('page_title','Size')
+@section('size_select','active')
 @section('container')
 
     @if(session()->has('message'))
-    <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
-        {{session('message')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-        </button>
-    </div>
+        <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
+            {{session('message')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
     @endif
-    <h3>Category</h3>
-    <a href="{{route('admin.category.manage_category')}}">
-        <button type="button" class="btn btn-success mt-3">Add Category</button>
+    <h3>Size</h3>
+    <a href="{{route('admin.size.manage_size')}}">
+        <button type="button" class="btn btn-success mt-3">Add Size</button>
     </a>
     <div class="row m-t-30">
         <div class="col-md-12">
@@ -23,8 +23,7 @@
                     <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Category Name</th>
-                        <th>Category Slug</th>
+                        <th>Size</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -32,22 +31,21 @@
                     @foreach($data as $list)
                         <tr>
                             <td>{{$list->id}}</td>
-                            <td>{{$list->category_name}}</td>
-                            <td>{{$list->category_slug}}</td>
+                            <td>{{$list->size}}</td>
                             <td>
-                                <a href="{{route('admin.category.edit',$list->id)}}">
+                                <a href="{{route('admin.size.edit',$list->id)}}">
                                     <button type="button" class="btn btn-success">Edit</button>
                                 </a>
                                 @if($list->status==1)
-                                    <a href="{{route('admin.category.status',['status' => 0,'id'=>$list->id])}}">
+                                    <a href="{{route('admin.size.status',['status' => 0,'id'=>$list->id])}}">
                                         <button type="button" class="btn btn-info">Active</button>
                                     </a>
                                 @elseif($list->status==0)
-                                    <a href="{{route('admin.category.status',['status' => 1,'id'=>$list->id])}}">
+                                    <a href="{{route('admin.size.status',['status' => 1,'id'=>$list->id])}}">
                                         <button type="button" class="btn btn-warning">DeActive</button>
                                     </a>
                                 @endif
-                                <a href="{{route('admin.category.delete',$list->id)}}">
+                                <a href="{{route('admin.size.delete',$list->id)}}">
                                     <button type="button" class="btn btn-danger">Delete</button>
                                 </a>
                             </td>

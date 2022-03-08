@@ -49,13 +49,21 @@
                         <a href="dashboard">
                             <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                     </li>
-                    <li>
+                    <li class="@yield('category_select')">
                         <a href="{{route('admin.category.index')}}">
                             <i class="fas fa-tachometer-alt"></i>Category</a>
                     </li>
-                    <li>
+                    <li class="@yield('coupon_select')">
                         <a href="{{route('admin.coupon.index')}}">
                             <i class="fas fa-tachometer-alt"></i>Coupon</a>
+                    </li>
+                    <li class="@yield('size_select')">
+                        <a href="{{route('admin.size.index')}}">
+                            <i class="fas fa-tachometer-alt"></i>Size</a>
+                    </li>
+                    <li class="@yield('color_select')">
+                        <a href="{{route('admin.color.index')}}">
+                            <i class="fas fa-paint-brush"></i>Color</a>
                     </li>
 
                 </ul>
@@ -74,19 +82,31 @@
         <div class="menu-sidebar__content js-scrollbar1">
             <nav class="navbar-sidebar">
                 <ul class="list-unstyled navbar__list">
-                    <li>
+
+                    <li class="@yield('dashboard_select')">
                         <a href="{{route('admin.dashboard')}}">
                             <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                     </li>
-                    <li>
+                    <li class="@yield('category_select')">
                         <a href="{{route('admin.category.index')}}">
-                            <i class="fas fa-tachometer-alt"></i>Category</a>
+                            <i class="fas fa-list"></i>Category</a>
                     </li>
-                    <li>
+                    <li class="@yield('coupon_select')">
                         <a href="{{route('admin.coupon.index')}}">
-                            <i class="fas fa-tachometer-alt"></i>Coupon</a>
+                            <i class="fas fa-tag"></i>Coupon</a>
                     </li>
-
+                    <li class="@yield('size_select')">
+                        <a href="{{route('admin.size.index')}}">
+                            <i class="fas fa-window-maximize"></i>Size</a>
+                    </li>
+                    <li class="@yield('color_select')">
+                        <a href="{{route('admin.color.index')}}">
+                            <i class="fas fa-paint-brush"></i>Color</a>
+                    </li>
+                    <li class="@yield('product_select')">
+                        <a href="{{route('admin.product.index')}}">
+                            <i class="fas fa-product-hunt"></i>Product</a>
+                    </li>
 
                 </ul>
             </nav>

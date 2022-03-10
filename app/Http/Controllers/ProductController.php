@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -14,38 +17,17 @@ class ProductController extends Controller
     }
 
     public function manageProduct(){
-        $result['category_id']='';
-        $result['name']='';
-        $result['image']='';
-        $result['slug']='';
-        $result['brand']='';
-        $result['model']='';
-        $result['short_desc']='';
-        $result['desc']='';
-        $result['keywords']='';
-        $result['technical_specification']='';
-        $result['uses']='';
-        $result['warranty']='';
-        $result['status']='';
-        $result['id']=0;
-        return view('admin.product.manageProduct',$result);
+
+        return view('admin.product.manageProduct');
     }
     public function insert(Request $request){
-
         $request->validate([
             'name'=>'required',
             'slug'=>'required|unique:products,slug,'.$request->post('id'),
         ]);
 
-        if($request->post('id')>0){
-            $category = Product::find($request->post('id'));
-            $msg = "Product updated";
-        }else{
-            $category = new Product();
-            $msg = "Product inserted";
-
-        }
-        $category->category_id=1;
+        $category = new Product();
+        $category->category_id=$request->post('category');
         $category->name=$request->post('name');
         $category->slug=$request->post('slug');
         $category->brand=$request->post('brand');
@@ -58,6 +40,7 @@ class ProductController extends Controller
         $category->warranty=$request->post('warranty');
         $category->status=1;
         $category->save();
+        $msg = "Product inserted";
         $request->session()->flash('message',$msg);
         return redirect('admin/product');
     }
@@ -70,37 +53,36 @@ class ProductController extends Controller
     }
 
     public function edit(Request $request,$id){
-        if($id>0){
-            $arr = Product::where(['id'=>$id])->get();
-            $result['name']=$arr['0']->name;
-            $result['image']=$arr['0']->image;
-            $result['slug']=$arr['0']->slug;
-            $result['brand']=$arr['0']->brand;
-            $result['model']=$arr['0']->model;
-            $result['short_desc']=$arr['0']->short_desc;
-            $result['desc']=$arr['0']->desc;
-            $result['keywords']=$arr['0']->keywords;
-            $result['technical_specification']=$arr['0']->technical_specification;
-            $result['uses']=$arr['0']->uses;
-            $result['warranty']=$arr['0']->warranty;
-            $result['status']=$arr['0']->status;
-            $result['id']=$arr['0']->id;
-        }else{
-            $result['name']='';
-            $result['image']='';
-            $result['slug']='';
-            $result['brand']='';
-            $result['model']='';
-            $result['short_desc']='';
-            $result['desc']='';
-            $result['keywords']='';
-            $result['technical_specification']='';
-            $result['uses']='';
-            $result['warranty']='';
-            $result['status']='';
-            $result['id']=0;
-        }
-        return view('admin.product.manageProduct',$result);
+
+            $product = Product::findorfail($id);
+        return view('admin.product.manageProduct',['product'=>$product]);
+    }
+
+    public function update(Request $request){
+        Validator::make($request->all(),[
+        'name'=>'required',
+        'slug'=>'required|unique:products,slug,'.$request->post('id')
+        ]);
+
+        $product = Product::findorfail($request->id);
+        $product->name =$request->name;
+        $product->slug =$request->slug;
+        $product->image =$request->image;
+        $product->category_id =$request->category;
+        $product->brand =$request->brand;
+        $product->model =$request->model;
+        $product->short_desc =$request->short_desc;
+        $product->desc =$request->desc;
+        $product->keywords =$request->keywords;
+        $product->technical_specification =$request->technical_specification;
+        $product->uses =$request->uses;
+        $product->warranty =$request->warranty;
+        $product->save();
+
+        $msg = "Product updated";
+        $request->session()->flash('message',$msg);
+        return redirect('admin/product');
+
     }
     public function status(Request $request,$status,$id){
         $product = Product::findorfail($id);
@@ -109,4 +91,5 @@ class ProductController extends Controller
         $request->session()->flash('message','Product status updated');
         return redirect('admin/product');
     }
+
 }

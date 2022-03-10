@@ -70,4 +70,9 @@ class CategoryController extends Controller
         $request->session()->flash('message','Category status updated');
         return redirect('admin/category');
     }
+
+    public function selectCategories(Request $request){
+        $category = Category::select('categories.id','categories.category_name');
+        return response()->json($category->paginate(5, ['*'], 'page', $request->page));
+    }
 }

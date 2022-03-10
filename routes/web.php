@@ -38,6 +38,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::get('/delete/{id}', [CategoryController::class, 'delete'])->name('delete');
             Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
             Route::get('/status/{status}/{id}', [CategoryController::class, 'status'])->name('status');
+            Route::get('/select_categories', [CategoryController::class, 'selectCategories'])->name('select_categories');
         });
 
         //---Coupon Routes---//
@@ -77,6 +78,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::post('/insert', [ProductController::class, 'insert'])->name('insert');
             Route::get('/delete/{id}', [ProductController::class, 'delete'])->name('delete');
             Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('edit');
+            Route::post('/update', [ProductController::class, 'update'])->name('update');
             Route::get('/status/{status}/{id}', [ProductController::class, 'status'])->name('status');
         });
     });

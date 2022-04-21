@@ -9,8 +9,7 @@
     <title>@yield('page_title')</title>
     <!-- Fontfaces CSS-->
     <link href="{{asset('admin_assets/css/font-face.css')}}" rel="stylesheet" media="all">
-    <link href="{{asset('admin_assets/vendor/font-awesome-4.7/css/font-awesome.min.css')}}" rel="stylesheet"
-          media="all">
+    <link href="{{asset('admin_assets/vendor/font-awesome-4.7/css/font-awesome.min.css')}}" rel="stylesheet" media="all">
     <link href="{{asset('admin_assets/vendor/font-awesome-5/css/fontawesome-all.min.css')}}" rel="stylesheet"
           media="all">
     <link href="{{asset('admin_assets/vendor/mdi-font/css/material-design-iconic-font.min.css')}}" rel="stylesheet"
@@ -19,7 +18,7 @@
     <link href="{{asset('admin_assets/vendor/bootstrap-4.1/bootstrap.min.css')}}" rel="stylesheet" media="all">
     <!-- Main CSS-->
     <link href="{{asset('admin_assets/css/theme.css')}}" rel="stylesheet" media="all">
-{{--    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>--}}
+{{--    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" media="all">--}}
     <link href="{{asset('admin_assets/css/select2.min.css')}}" rel="stylesheet"/>
 
 </head>
@@ -107,7 +106,7 @@
                     </li>
                     <li class="@yield('product_select')">
                         <a href="{{route('admin.product.index')}}">
-                            <i class="fas fa-product-hunt"></i>Product</a>
+                            <i class="fa-solid fa-p"></i>Product</a>
                     </li>
 
                 </ul>

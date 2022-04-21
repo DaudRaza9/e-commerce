@@ -20,7 +20,8 @@ class Product extends Model
         'technical_specification',
         'uses',
         'warranty',
-        'status'
+        'status',
+        'image'
     ];
 
     public function category(){

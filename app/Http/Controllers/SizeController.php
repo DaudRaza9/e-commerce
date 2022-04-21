@@ -65,4 +65,10 @@ class SizeController extends Controller
         $request->session()->flash('message','Size status updated');
         return redirect('admin/size');
     }
+
+    public function SelectProductSize(Request $request){
+        $size = Size::select('sizes.id','sizes.size');
+        return response()->json($size->paginate(5, ['*'], 'page', $request->page));
+    }
+
 }

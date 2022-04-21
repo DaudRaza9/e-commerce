@@ -5,6 +5,7 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SizeController;
+use App\Http\Controllers\ProductAttributeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 
@@ -59,6 +60,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::get('/delete/{id}', [SizeController::class, 'delete'])->name('delete');
             Route::get('/edit/{id}', [SizeController::class, 'edit'])->name('edit');
             Route::get('/status/{status}/{id}', [SizeController::class, 'status'])->name('status');
+            Route::get('/select_size', [SizeController::class, 'SelectProductSize'])->name('select_size');
         });
 
         //---Color Routes---//
@@ -69,17 +71,23 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::get('/delete/{id}', [ColorController::class, 'delete'])->name('delete');
             Route::get('/edit/{id}', [ColorController::class, 'edit'])->name('edit');
             Route::get('/status/{status}/{id}', [ColorController::class, 'status'])->name('status');
+            Route::get('/select_color', [ColorController::class, 'selectColor'])->name('select_color');
         });
 
         //---Products Routes---//
         Route::group(['prefix' => 'product', 'as' => 'product.'], function () {
             Route::get('/', [ProductController::class, 'index'])->name('index');
-            Route::get('/manage_product', [ProductController::class, 'manageProduct'])->name('manage_product');
+            Route::get('/create_product', [ProductController::class, 'createProduct'])->name('create_product');
             Route::post('/insert', [ProductController::class, 'insert'])->name('insert');
             Route::get('/delete/{id}', [ProductController::class, 'delete'])->name('delete');
             Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('edit');
             Route::post('/update', [ProductController::class, 'update'])->name('update');
             Route::get('/status/{status}/{id}', [ProductController::class, 'status'])->name('status');
+            Route::get('/imageDelete/{pId}/{pIId}', [ProductController::class, 'imageDelete'])->name('imageDelete');
+        });
+
+        Route::group(['prefix' => 'productAttribute', 'as' => 'productAttribute.'], function () {
+            Route::get('/delete/{pId}/{pAId}', [ProductAttributeController::class, 'delete'])->name('delete');
         });
     });
 

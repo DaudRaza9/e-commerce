@@ -4,15 +4,16 @@
 @section('container')
 
     @if(session()->has('message'))
-    <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
-        {{session('message')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-        </button>
-    </div>
+        <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
+            {{session('message')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
     @endif
+
     <h3>Products</h3>
-    <a href="{{route('admin.product.manage_product')}}">
+    <a href="{{route('admin.product.create_product')}}">
         <button type="button" class="btn btn-success mt-3">Add Product</button>
     </a>
     <div class="row m-t-30">
@@ -25,6 +26,7 @@
                         <th>Id</th>
                         <th>Name</th>
                         <th>Slug</th>
+                        <th>Image</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -34,6 +36,7 @@
                             <td>{{$list->id}}</td>
                             <td>{{$list->name}}</td>
                             <td>{{$list->slug}}</td>
+                            <td><img width="70px" height="70px" src="{{asset('storage/products/'.$list->image)}}" alt=""> </td>
                             <td>
                                 <a href="{{route('admin.product.edit',$list->id)}}">
                                     <button type="button" class="btn btn-success">Edit</button>

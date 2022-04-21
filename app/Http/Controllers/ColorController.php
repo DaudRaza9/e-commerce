@@ -66,4 +66,10 @@ class ColorController extends Controller
         $request->session()->flash('message','Color status updated');
         return redirect('admin/color');
     }
+
+    public function selectColor(Request $request){
+        $size = Color::select('colors.id','colors.color');
+        return response()->json($size->paginate(5, ['*'], 'page', $request->page));
+
+    }
 }

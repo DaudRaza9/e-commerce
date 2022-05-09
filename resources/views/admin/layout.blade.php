@@ -32,7 +32,7 @@
         <div class="header-mobile__bar">
             <div class="container-fluid">
                 <div class="header-mobile-inner">
-                    <a class="logo" href="index.html">
+                    <a class="logo" href="#">
                         <img src="{{asset('admin_assets/images/icon/logo.png')}}" alt="CoolAdmin"/>
                     </a>
                     <button class="hamburger hamburger--slider" type="button">
@@ -46,8 +46,8 @@
         <nav class="navbar-mobile">
             <div class="container-fluid">
                 <ul class="navbar-mobile__list list-unstyled">
-                    <li>
-                        <a href="dashboard">
+                    <li class="has-sub">
+                        <a href="#">
                             <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                     </li>
                     <li class="@yield('category_select')">
@@ -106,7 +106,23 @@
                     </li>
                     <li class="@yield('product_select')">
                         <a href="{{route('admin.product.index')}}">
-                            <i class="fa-solid fa-p"></i>Product</a>
+                            <i class="fa-solid fa-product-hunt"></i>Product</a>
+                    </li>
+                    <li class="@yield('customer_select')">
+                        <a href="{{route('admin.customer.index')}}">
+                            <i class="fas fa-user"></i>Customer</a>
+                    </li>
+                    <li class="@yield('brand_select')">
+                        <a href="{{route('admin.brand.index')}}">
+                            <i class="fas fa-braille"></i>Brand</a>
+                    </li>
+                    <li class="@yield('tax_select')">
+                        <a href="{{route('admin.tax.index')}}">
+                            <i class="fas fa-percent"></i>Tax</a>
+                    </li>
+                    <li class="@yield('home_banner_select')">
+                        <a href="{{route('admin.home-banner.index')}}">
+                            <i class="fas fa-image"></i>Home Banner</a>
                     </li>
 
                 </ul>
@@ -145,7 +161,7 @@
 
                                         </div>
                                         <div class="account-dropdown__footer">
-                                            <a href="logout">
+                                            <a href="{{route('admin.logout')}}">
                                                 <i class="zmdi zmdi-power"></i>Logout</a>
                                         </div>
                                     </div>
@@ -174,7 +190,7 @@
 
 </div>
 
-
+@include('admin.scripts')
 </body>
 
 </html>

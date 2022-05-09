@@ -7,9 +7,10 @@
         <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
             {{session('message')}}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span>
+                <span aria-hidden="true">x</span>
             </button>
         </div>
+
     @endif
     <h3>Coupon</h3>
      <a href="{{route('admin.coupon.manage_coupon')}}">

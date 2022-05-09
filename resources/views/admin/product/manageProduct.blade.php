@@ -48,6 +48,8 @@
     <a href="{{route('admin.product.index')}}">
         <button type="button" class="btn btn-success mt-3">Back</button>
     </a>
+    <script src="{{asset('admin_assets/ckeditor/ckeditor.js')}}"></script>
+
     @php
         if(isset($product))
         {
@@ -127,12 +129,16 @@
 
                                 <div class="form-group">
                                     <label for="brand" class="control-label mb-1">Brand </label>
-                                    <input id="brand" name="brand" type="text" class="form-control"
-                                           aria-required="true" aria-invalid="false" required
-                                           @if(isset($product))
-                                           value="{{$product->brand}}"
+                                    <select id="brand" data-field-name="brand" class="form-control select2-reset"
+                                            name="brand" multiple="multiple" required>
+                                        <option value=""></option>
+                                        @if(isset($product))
+                                            @if(!empty($product->brand))
+                                                <option value="{{$product->brand}}"
+                                                        selected>{{$product->brand}}</option>
+                                            @endif
                                         @endif
-                                    >
+                                    </select>
                                     @error('brand')
                                     <div class="alert alert-danger" role="alert">
                                         {{$message}}
@@ -243,6 +249,161 @@
                                     @enderror
                                 </div>
 
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="model" class="control-label mb-1">Lead Time </label>
+                                                <input id="lead_time" name="lead_time" type="text" class="form-control"
+                                                       aria-required="true" aria-invalid="false"
+                                                       @if(isset($product))
+                                                       value="{{$product->lead_time}}"
+                                                    @endif
+                                                >
+                                                @error('lead_time')
+                                                <div class="alert alert-danger" role="alert">
+                                                    {{$message}}
+                                                </div>
+                                                @enderror
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="model" class="control-label mb-1">Tax </label>
+                                                <select name="tax_id" id="tax_id" class="form-control" required>
+                                                    <option value="">Select Tax</option>
+                                                    @if(isset($product))
+                                                        @if(!empty($product->tax))
+                                                            <option value="{{$product->tax->id}}"
+                                                                    selected>{{$product->tax->tax_desc}}</option>
+                                                        @endif
+                                                    @endif
+                                                </select>
+                                                @error('tax_id')
+                                                <div class="alert alert-danger" role="alert">
+                                                    {{$message}}
+                                                </div>
+                                                @enderror
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="model" class="control-label mb-1">Is Promo </label>
+                                                <select name="is_promo" id="is_promo" class="form-control">
+                                                    @if(isset($product))
+                                                        @if($product->is_promo == '1')
+                                                            <option value="1" selected>Yes</option>
+                                                            <option value="0">No</option>
+                                                        @elseif($product->is_promo == '0')
+                                                            <option value="1">Yes</option>
+                                                            <option value="0" selected>No</option>
+                                                        @else
+                                                            <option value="1">Yes</option>
+                                                            <option value="0">No</option>
+                                                        @endif
+                                                    @else
+                                                        <option value="1">Yes</option>
+                                                        <option value="0">No</option>
+                                                    @endif
+
+                                                </select>
+                                                @error('is_promo')
+                                                <div class="alert alert-danger" role="alert">
+                                                    {{$message}}
+                                                </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="model" class="control-label mb-1">Is Featured </label>
+                                                <select name="is_featured" id="is_featured" class="form-control">
+                                                    @if(isset($product))
+                                                        @if($product->is_featured == '1')
+                                                            <option value="1" selected>Yes</option>
+                                                            <option value="0">No</option>
+                                                        @elseif($product->is_featured == '0')
+                                                            <option value="1">Yes</option>
+                                                            <option value="0" selected>No</option>
+                                                        @else
+                                                            <option value="1">Yes</option>
+                                                            <option value="0">No</option>
+                                                        @endif
+                                                    @else
+                                                        <option value="1">Yes</option>
+                                                        <option value="0">No</option>
+                                                    @endif
+
+                                                </select>
+                                                @error('is_featured')
+                                                <div class="alert alert-danger" role="alert">
+                                                    {{$message}}
+                                                </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="model" class="control-label mb-1">Is Discounted </label>
+                                                <select name="is_discounted" id="is_discounted" class="form-control">
+                                                    @if(isset($product))
+                                                        @if($product->is_discounted == '1')
+                                                            <option value="1" selected>Yes</option>
+                                                            <option value="0">No</option>
+                                                        @elseif($product->is_discounted == '0')
+                                                            <option value="1">Yes</option>
+                                                            <option value="0" selected>No</option>
+                                                        @else
+                                                            <option value="1">Yes</option>
+                                                            <option value="0">No</option>
+                                                        @endif
+                                                    @else
+                                                        <option value="1">Yes</option>
+                                                        <option value="0">No</option>
+                                                    @endif
+
+                                                </select>
+                                                @error('is_discounted')
+                                                <div class="alert alert-danger" role="alert">
+                                                    {{$message}}
+                                                </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="model" class="control-label mb-1">Is Tranding </label>
+                                                <select name="is_tranding" id="is_tranding" class="form-control">
+                                                    @if(isset($product))
+                                                        @if($product->is_tranding == '1')
+                                                            <option value="1" selected>Yes</option>
+                                                            <option value="0">No</option>
+                                                        @elseif($product->is_tranding == '0')
+                                                            <option value="1">Yes</option>
+                                                            <option value="0" selected>No</option>
+                                                        @else
+                                                            <option value="1">Yes</option>
+                                                            <option value="0">No</option>
+                                                        @endif
+                                                    @else
+                                                        <option value="1">Yes</option>
+                                                        <option value="0">No</option>
+                                                    @endif
+
+                                                </select>
+                                                @error('is_tranding')
+                                                <div class="alert alert-danger" role="alert">
+                                                    {{$message}}
+                                                </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
 
                                 {{--                            </form>--}}
                             </div>
@@ -272,8 +433,8 @@
                                                        aria-required="true" aria-invalid="false">
 
 
-                                                    <img width="100px" class="mt-3 ml-1"
-                                                         src="{{asset('storage/products/'.$key->images)}}" alt="">
+                                                <img width="100px" class="mt-3 ml-1"
+                                                     src="{{asset('storage/products/'.$key->images)}}" alt="">
                                             </div>
                                             <div class="col-md-2 mt-4" id="product_images_{{$loop_image_count++}}">
                                                 @if($loop_image_count==2)
@@ -296,7 +457,7 @@
                                                 $loop_image_count_prev=$loop_image_count;
                                             @endphp
                                             <input id="pIId" name="pIId[]" type="hidden"
-                                                    value="">
+                                                   value="">
 
                                             <div class="col-md-4 product_images_{{$loop_image_count}}">
                                                 <label for="images" class="control-label mb-1">Product Image</label>
@@ -361,7 +522,7 @@
                                                    aria-required="true" aria-invalid="false"
                                                    @if(isset($product)) value="{{$key->mrp}}" @endif  required
                                             >
-                                            @error('brand')
+                                            @error('mrp')
                                             <div class="alert alert-danger" role="alert">
                                                 {{$message}}
                                             </div>
@@ -404,10 +565,6 @@
                                                         <option value="{{$key->size->id}}"
                                                                 selected>{{$key->size->size}}</option>
                                                     @endif
-                                                    {{--@else--}}
-                                                    {{--@foreach($size as $list)--}}
-                                                    {{--<option value="{{$list->id}}">{{$list->size}}</option>--}}
-                                                    {{--@endforeach--}}
                                                 @endif
                                             </select>
                                         </div>
@@ -420,10 +577,6 @@
                                                         <option value="{{$key->color->id}}"
                                                                 selected>{{$key->color->color}}</option>
                                                     @endif
-                                                    {{--@else--}}
-                                                    {{--@foreach($color as $list)--}}
-                                                    {{--<option value="{{$list->id}}">{{$list->color}}</option>--}}
-                                                    {{--@endforeach--}}
                                                 @endif
 
                                             </select>
@@ -431,7 +584,10 @@
                                         <div class="col-md-4">
                                             <label for="attr_image" class="control-label mb-1">Attr_image</label>
                                             <input id="attr_image" name="attr_image[]" type="file" class="form-control"
-                                                   aria-required="true" aria-invalid="false" {{$image_required}}>
+                                                   aria-required="true" aria-invalid="false">
+                                            @if(isset($product))
+                                                <img src="{{asset('storage/products-attr/'.$key->attr_image)}}" alt="" width="100px">
+                                            @endif
                                         </div>
                                         <div class="col-md-2 mt-4">
                                             @if($loop_count_num==2)
@@ -440,7 +596,7 @@
                                                     <i class="fa fa-plus">&nbsp; Add</i>
                                                 </button>
                                             @else
-                                                <a href="{{route('admin.productAttribute.delete',['pId'=>$productAttributesData->products_id,'pAId'=>$key->id])}}">
+                                                <a href="{{route('admin.productAttribute.delete',['pId'=>$key->products_id,'pAId'=>$key->id])}}">
                                                     <button type="button" class="btn btn-danger btn-lg">
                                                         <i class="fa fa-minus">&nbsp; Remove</i>
                                                     </button>
@@ -635,6 +791,72 @@
             });
         });
 
+        $(document).ready(function () {
+            $('#brand').select2({
+                placeholder: 'Select Brand',
+                ajax: {
+                    url: '{{route('admin.brand.select_brand')}}',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term,
+                            page: params.page || 1
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data.data, function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.brand
+                                }
+                            }),
+                            pagination: {
+                                more: (data.current_page < data.last_page)
+                            }
+                        };
+                    },
+                    cache: true
+                }
+
+            });
+        });
+
+        $(document).ready(function () {
+            $('#tax_id').select2({
+                placeholder: 'Select Brand',
+                ajax: {
+                    url: '{{route('admin.tax.select_tax')}}',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term,
+                            page: params.page || 1
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data.data, function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.tax_desc
+                                }
+                            }),
+                            pagination: {
+                                more: (data.current_page < data.last_page)
+                            }
+                        };
+                    },
+                    cache: true
+                }
+
+            });
+        });
+        CKEDITOR.replace('short_desc');
+        CKEDITOR.replace('desc');
+        CKEDITOR.replace('technical_specification');
     </script>
 
 @endsection

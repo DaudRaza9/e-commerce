@@ -1,13 +1,18 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ColorController;
-use App\Http\Controllers\CouponController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\SizeController;
-use App\Http\Controllers\ProductAttributeController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\ProductAttributeController;
+use App\Http\Controllers\Admin\TaxController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\HomeBannerController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Front\FrontController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,16 +25,14 @@ use App\Http\Controllers\AdminController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/', [AdminController::class, 'index']);
     Route::post('/login', [AdminController::class, 'login'])->name('login');
 
     Route::group(['middleware'=>'admin_auth'],function (){
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-        Route::get('/logout', [AdminController::class, 'logout']);
+        Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 
         //---Category Routes---//
         Route::group(['prefix' => 'category', 'as' => 'category.'], function () {
@@ -38,6 +41,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::post('/insert', [CategoryController::class, 'insert'])->name('insert');
             Route::get('/delete/{id}', [CategoryController::class, 'delete'])->name('delete');
             Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
+            Route::post('/update', [CategoryController::class, 'update'])->name('update');
             Route::get('/status/{status}/{id}', [CategoryController::class, 'status'])->name('status');
             Route::get('/select_categories', [CategoryController::class, 'selectCategories'])->name('select_categories');
         });
@@ -84,11 +88,67 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::post('/update', [ProductController::class, 'update'])->name('update');
             Route::get('/status/{status}/{id}', [ProductController::class, 'status'])->name('status');
             Route::get('/imageDelete/{pId}/{pIId}', [ProductController::class, 'imageDelete'])->name('imageDelete');
+            Route::get('/productAttributeImageDelete/{pId}/{pIId}', [ProductController::class, 'productAttributeDelete'])->name('productAttributeImageDelete');
         });
+
+        //--Brand Routes--//
+        Route::group(['prefix' => 'brand', 'as' => 'brand.'], function () {
+            Route::get('/', [BrandController::class, 'index'])->name('index');
+            Route::get('/create_brand', [BrandController::class, 'createBrand'])->name('manage_brand');
+            Route::post('/insert', [BrandController::class, 'insert'])->name('insert');
+            Route::get('/delete/{id}', [BrandController::class, 'delete'])->name('delete');
+            Route::get('/edit/{id}', [BrandController::class, 'edit'])->name('edit');
+            Route::post('/update', [BrandController::class, 'update'])->name('update');
+            Route::get('/status/{status}/{id}', [BrandController::class, 'status'])->name('status');
+            Route::get('/imageDelete/{pId}/{pIId}', [BrandController::class, 'imageDelete'])->name('imageDelete');
+            Route::get('/select_brand', [BrandController::class, 'selectBrand'])->name('select_brand');
+
+        });
+
+        //--Tax Routes--//
+        Route::group(['prefix' => 'tax', 'as' => 'tax.'], function () {
+            Route::get('/', [TaxController::class, 'index'])->name('index');
+            Route::get('/manage_tax', [TaxController::class, 'manageTax'])->name('manage_tax');
+            Route::post('/insert', [TaxController::class, 'insert'])->name('insert');
+            Route::get('/delete/{id}', [TaxController::class, 'delete'])->name('delete');
+            Route::get('/edit/{id}', [TaxController::class, 'edit'])->name('edit');
+            Route::get('/status/{status}/{id}', [TaxController::class, 'status'])->name('status');
+            Route::get('/select_tax', [TaxController::class, 'selectTax'])->name('select_tax');
+        });
+
+        //--Customer Routes--//
+        Route::group(['prefix' => 'customer', 'as' => 'customer.'], function () {
+            Route::get('/', [CustomerController::class, 'index'])->name('index');
+            Route::get('/show/{id}', [CustomerController::class, 'show'])->name('show');
+            Route::get('/delete/{id}', [CustomerController::class, 'delete'])->name('delete');
+            Route::get('/status/{status}/{id}', [CustomerController::class, 'status'])->name('status');
+            });
+
+        //--Home Banner Routes--//
+        Route::group(['prefix' => 'home-banner', 'as' => 'home-banner.'], function () {
+            Route::get('/', [HomeBannerController::class, 'index'])->name('index');
+            Route::get('/create_home_banner', [HomeBannerController::class, 'ManageHomeBanner'])->name('manage_home_banner');
+            Route::post('/insert', [HomeBannerController::class, 'insert'])->name('insert');
+            Route::get('/delete/{id}', [HomeBannerController::class, 'delete'])->name('delete');
+            Route::get('/edit/{id}', [HomeBannerController::class, 'edit'])->name('edit');
+            Route::post('/update', [HomeBannerController::class, 'update'])->name('update');
+            Route::get('/status/{status}/{id}', [HomeBannerController::class, 'status'])->name('status');
+            Route::get('/imageDelete/{pId}/{pIId}', [HomeBannerController::class, 'imageDelete'])->name('imageDelete');
+            Route::get('/select_home_banner', [HomeBannerController::class, 'selectHomeBanner'])->name('select_banner');
+        });
+
 
         Route::group(['prefix' => 'productAttribute', 'as' => 'productAttribute.'], function () {
             Route::get('/delete/{pId}/{pAId}', [ProductAttributeController::class, 'delete'])->name('delete');
         });
+
+
     });
 
 });
+
+//--FrontEnd Controller--//
+
+Route::get('/', [FrontController::class, 'index'])->name('index');
+Route::get('/product/{id}', [FrontController::class, 'product'])->name('product');
+

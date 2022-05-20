@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Daily Shop | Home</title>
+    <title>@yield('page_title')</title>
 
     <link href="{{asset('front_assets/css/font-awesome.css')}}" rel="stylesheet">
     <link href="{{asset('front_assets/css/bootstrap.css')}}" rel="stylesheet">
@@ -20,7 +20,6 @@
 
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-
 </head>
 <body>
 <!-- wpf loader Two -->
@@ -124,7 +123,7 @@
                             <div class="aa-cartbox-summary">
                                 <ul>
                                     <li>
-                                        <a class="aa-cartbox-img" href="#"><img src="{{asset('front_assets/img/women-small-2.jpg')}}" alt="img"></a>
+                                        <a class="aa-cartbox-img" href="#"><img src="#" alt="img"></a>
                                         <div class="aa-cartbox-info">
                                             <h4><a href="#">Product Name</a></h4>
                                             <p>1 x $250</p>
@@ -132,7 +131,7 @@
                                         <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
                                     </li>
                                     <li>
-                                        <a class="aa-cartbox-img" href="#"><img src="{{asset('front_assets/img/women-small-1.jpg')}}" alt="img"></a>
+                                        <a class="aa-cartbox-img" href="#"><img src="#" alt="img"></a>
                                         <div class="aa-cartbox-info">
                                             <h4><a href="#">Product Name</a></h4>
                                             <p>1 x $250</p>

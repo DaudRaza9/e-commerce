@@ -81,14 +81,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         //---Products Routes---//
         Route::group(['prefix' => 'product', 'as' => 'product.'], function () {
             Route::get('/', [ProductController::class, 'index'])->name('index');
-            Route::get('/create_product', [ProductController::class, 'createProduct'])->name('create_product');
-            Route::post('/insert', [ProductController::class, 'insert'])->name('insert');
+            Route::get('/manage_product', [ProductController::class, 'manageProduct'])->name('manage_product');
+            Route::get('/manage_product/{id}', [ProductController::class, 'manageProduct'])->name('manage_product');
+            Route::post('/manage_product_process', [ProductController::class, 'ManageProductProcess'])->name('manage_product_process');
             Route::get('/delete/{id}', [ProductController::class, 'delete'])->name('delete');
             Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('edit');
             Route::post('/update', [ProductController::class, 'update'])->name('update');
             Route::get('/status/{status}/{id}', [ProductController::class, 'status'])->name('status');
-            Route::get('/imageDelete/{pId}/{pIId}', [ProductController::class, 'imageDelete'])->name('imageDelete');
-            Route::get('/productAttributeImageDelete/{pId}/{pIId}', [ProductController::class, 'productAttributeDelete'])->name('productAttributeImageDelete');
+            Route::get('/product_images_delete/{paid}/{pid}', [ProductController::class, 'imageDelete'])->name('imageDelete');
+            Route::get('/product_attr_delete/{paid}/{id}', [ProductController::class, 'productAttributeDelete'])->name('productAttributeImageDelete');
         });
 
         //--Brand Routes--//
@@ -151,4 +152,5 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
 Route::get('/', [FrontController::class, 'index'])->name('index');
 Route::get('/product/{id}', [FrontController::class, 'product'])->name('product');
+Route::post('/add-to-cart', [FrontController::class, 'addToCart'])->name('add-to-cart');
 

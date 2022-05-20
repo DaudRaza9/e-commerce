@@ -1,5 +1,5 @@
 @extends('front.layouts.layout')
-
+@section('page_title','Home Page')
 @section('container')
 
     <!-- Start slider -->
@@ -40,10 +40,10 @@
                 <div class="col-md-12">
                     <div class="aa-promo-area">
                         <div class="row">
-                            <div class="col-md-7 no-padding">
-                                <div class="aa-promo-right">
+                            <div class="col-md-12 no-padding">
+                                <div class="row">
                                     @foreach($home_categories as $list)
-                                        <div class="aa-single-promo-right">
+                                        <div class="col-md-4">
                                             <div class="aa-promo-banner">
                                                 <img src="{{asset('storage/category/'.$list->category_image)}}"
                                                      alt="img">
@@ -175,7 +175,9 @@
                                             @foreach($home_featured_product[$list->id] as $productArray)
                                                 <li>
                                                     <figure>
-                                                        <a class="aa-product-img" href="{{url('product/'.$productArray->slug)}}"><img
+                                                        <a class="aa-product-img" href="{{url('product/'.$productArray->slug)}}">
+                                                            <img
+                                                                class="w-100"
                                                                 src="{{asset('storage/products/'.$productArray->image)}}"
                                                                 alt="{{$productArray->name}}"></a>
                                                         <a class="aa-add-card-btn" href="{{url('product/'.$productArray->slug)}}"><span

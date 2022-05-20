@@ -37,7 +37,7 @@
                     </a>
                     <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box">
-                                <span class="hamburger-inner"></span>
+                                <span class="hamburger-inner"><i class="fa fa-bars"></i></span>
                             </span>
                     </button>
                 </div>
@@ -46,25 +46,46 @@
         <nav class="navbar-mobile">
             <div class="container-fluid">
                 <ul class="navbar-mobile__list list-unstyled">
-                    <li class="has-sub">
-                        <a href="#">
+
+                    <li class="@yield('dashboard_select')">
+                        <a href="{{route('admin.dashboard')}}">
                             <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                     </li>
                     <li class="@yield('category_select')">
                         <a href="{{route('admin.category.index')}}">
-                            <i class="fas fa-tachometer-alt"></i>Category</a>
+                            <i class="fas fa-list"></i>Category</a>
                     </li>
                     <li class="@yield('coupon_select')">
                         <a href="{{route('admin.coupon.index')}}">
-                            <i class="fas fa-tachometer-alt"></i>Coupon</a>
+                            <i class="fas fa-tag"></i>Coupon</a>
                     </li>
                     <li class="@yield('size_select')">
                         <a href="{{route('admin.size.index')}}">
-                            <i class="fas fa-tachometer-alt"></i>Size</a>
+                            <i class="fas fa-window-maximize"></i>Size</a>
                     </li>
                     <li class="@yield('color_select')">
                         <a href="{{route('admin.color.index')}}">
                             <i class="fas fa-paint-brush"></i>Color</a>
+                    </li>
+                    <li class="@yield('product_select')">
+                        <a href="{{route('admin.product.index')}}">
+                            <i class="fa-solid fa-product-hunt"></i>Product</a>
+                    </li>
+                    <li class="@yield('customer_select')">
+                        <a href="{{route('admin.customer.index')}}">
+                            <i class="fas fa-user"></i>Customer</a>
+                    </li>
+                    <li class="@yield('brand_select')">
+                        <a href="{{route('admin.brand.index')}}">
+                            <i class="fas fa-braille"></i>Brand</a>
+                    </li>
+                    <li class="@yield('tax_select')">
+                        <a href="{{route('admin.tax.index')}}">
+                            <i class="fas fa-percent"></i>Tax</a>
+                    </li>
+                    <li class="@yield('home_banner_select')">
+                        <a href="{{route('admin.home-banner.index')}}">
+                            <i class="fas fa-image"></i>Home Banner</a>
                     </li>
 
                 </ul>

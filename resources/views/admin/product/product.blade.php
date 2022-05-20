@@ -13,7 +13,7 @@
     @endif
 
     <h3>Products</h3>
-    <a href="{{route('admin.product.create_product')}}">
+    <a href="{{url('admin/product/manage_product')}}">
         <button type="button" class="btn btn-success mt-3">Add Product</button>
     </a>
     <div class="row m-t-30">
@@ -36,9 +36,10 @@
                             <td>{{$list->id}}</td>
                             <td>{{$list->name}}</td>
                             <td>{{$list->slug}}</td>
-                            <td><img width="70px" height="70px" src="{{asset('storage/products/'.$list->image)}}" alt=""> </td>
+                            <td><img width="70px" height="70px" src="{{asset('storage/products/'.$list->image)}}"
+                                     alt=""></td>
                             <td>
-                                <a href="{{route('admin.product.edit',$list->id)}}">
+                                <a href="{{route('admin.product.manage_product',$list->id)}}">
                                     <button type="button" class="btn btn-success">Edit</button>
                                 </a>
                                 @if($list->status==1)

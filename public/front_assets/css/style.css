@@ -948,10 +948,10 @@ img {
   transition: all 0.3s ease-out;
 }
 #aa-promo .aa-promo-area .aa-promo-banner:hover img {
-  height: 120%;
-  width: 120%;
-  margin-left: -10%;
-  margin-top: -10%;
+  height: 100%;
+  width: 100%;
+  /*margin-left: -10%;*/
+  /*margin-top: -10%;*/
 }
 #aa-promo .aa-promo-area .aa-promo-banner:hover:before {
   -moz-transform: scale(2);
@@ -4194,4 +4194,14 @@ img {
 }
 .aa-color-purple{
     background-color: purple;
+}
+
+
+/*Helping Classes*/
+
+.w-100{
+    width: 100%;
+}
+.mt-5{
+    margin-top: 10px;
 }

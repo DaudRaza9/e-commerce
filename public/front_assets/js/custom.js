@@ -375,6 +375,12 @@ function showColor(size){
     jQuery('#size_'+size).css('border','2px solid black');
 }
 
+function homeAddToCart(id,size_str_id,color_str_id)
+{
+    jQuery('#size_id').val(size_str_id);
+    jQuery('#color_id').val(color_str_id);
+    addToCart(id,size_str_id,color_str_id);
+}
 function addToCart(id,size_str_id,color_str_id)
 {
     jQuery('#add_to_cart_msg').html('');
@@ -418,4 +424,25 @@ function addToCart(id,size_str_id,color_str_id)
 
         });
     }
+
+}
+
+function updateQuantity(product_id,size,color,attribute_id,price)
+{
+    jQuery('#size_id').val(size);
+    jQuery('#color_id').val(color);
+    var quantity = jQuery('#quantity'+attribute_id).val();
+    jQuery('#quantity').val(quantity);
+    addToCart(product_id,size,color);
+    jQuery('#total_price_'+attribute_id).html('Rs '+quantity*price);
+}
+
+function deleteCartProduct (product_id,size,color,attribute_id)
+{
+    jQuery('#size_id').val(size);
+    jQuery('#color_id').val(color);
+    jQuery('#quantity').val(0);
+    addToCart(product_id,size,color);
+    // jQuery('#total_price_'+attribute_id).html('Rs '+quantity*price);
+    jQuery('#cart_box'+attribute_id).remove();
 }

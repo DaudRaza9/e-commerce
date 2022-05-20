@@ -104,7 +104,7 @@
                                                         <a class="aa-product-img" href="{{url('product/'.$productArray->slug)}}"><img
                                                                 src="{{asset('storage/products/'.$productArray->image)}}"
                                                                 alt="{{$productArray->name}}"></a>
-                                                        <a class="aa-add-card-btn" href="{{url('product/'.$productArray->slug)}}"><span
+                                                        <a class="aa-add-card-btn" href="javascript:void(0)"  onclick="homeAddToCart('{{$productArray->id}}','{{$home_product_attribute[$productArray->id][0]->size}}','{{$home_product_attribute[$productArray->id][0]->color}}')"><span
                                                                 class="fa fa-shopping-cart"></span>Add To Cart</a>
                                                         <figcaption>
                                                             <h4 class="aa-product-title"><a href="{{url('product/'.$productArray->slug)}}">{{$productArray->name}}</a></h4>
@@ -329,5 +329,13 @@
         </div>
     </section>
     <!-- / Client Brand -->
+    <input type="hidden" id="quantity" value="1">
+    <form action="" id="fromAddToCart">
+        @csrf
+        <input type="hidden" id="size_id" name="size_id">
+        <input type="hidden" id="color_id" name="color_id">
+        <input type="hidden" id="product_quantity" name="product_quantity">
+        <input type="hidden" id="product_id" name="product_id">
 
+    </form>
 @endsection

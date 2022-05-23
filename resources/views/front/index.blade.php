@@ -180,7 +180,10 @@
                                                                 class="w-100"
                                                                 src="{{asset('storage/products/'.$productArray->image)}}"
                                                                 alt="{{$productArray->name}}"></a>
-                                                        <a class="aa-add-card-btn" href="{{url('product/'.$productArray->slug)}}"><span
+                                                        <a class="aa-add-card-btn" href="javascript:void(0)" onclick="homeAddToCart('{{$productArray->id}}',
+                                                            '{{$home_featured_product_attribute[$productArray->id][0]->size}}',
+                                                            '{{$home_featured_product_attribute[$productArray->id][0]->color}}',
+                                                            )"><span
                                                                 class="fa fa-shopping-cart"></span>Add To Cart</a>
                                                         <figcaption>
                                                             <h4 class="aa-product-title"><a href="{{url('product/'.$productArray->slug)}}">{{$productArray->name}}</a></h4>
@@ -213,7 +216,10 @@
                                                         <a class="aa-product-img" href="{{url('product/'.$productArray->slug)}}"><img
                                                                 src="{{asset('storage/products/'.$productArray->image)}}"
                                                                 alt="{{$productArray->name}}"></a>
-                                                        <a class="aa-add-card-btn" href="{{url('product/'.$productArray->slug)}}"><span
+                                                        <a class="aa-add-card-btn" href="javascript:void(0)"  onclick="homeAddToCart('{{$productArray->id}}',
+                                                            '{{$home_tranding_product_attribute[$productArray->id][0]->size}}',
+                                                            '{{$home_tranding_product_attribute[$productArray->id][0]->color}}',
+                                                            )"><span
                                                                 class="fa fa-shopping-cart"></span>Add To Cart</a>
                                                         <figcaption>
                                                             <h4 class="aa-product-title"><a href="{{url('product/'.$productArray->slug)}}">{{$productArray->name}}</a></h4>
@@ -245,7 +251,10 @@
                                                         <a class="aa-product-img" href="{{url('product/'.$productArray->slug)}}"><img
                                                                 src="{{asset('storage/products/'.$productArray->image)}}"
                                                                 alt="{{$productArray->name}}"></a>
-                                                        <a class="aa-add-card-btn" href="{{url('product/'.$productArray->slug)}}"><span
+                                                        <a class="aa-add-card-btn" href="javascript:void(0)" onclick="homeAddToCart('{{$productArray->id}}',
+                                                            '{{$home_discounted_product_attribute[$productArray->id][0]->size}}',
+                                                            '{{$home_discounted_product_attribute[$productArray->id][0]->color}}',
+                                                            )"><span
                                                                 class="fa fa-shopping-cart"></span>Add To Cart</a>
                                                         <figcaption>
                                                             <h4 class="aa-product-title"><a href="{{url('product/'.$productArray->slug)}}">{{$productArray->name}}</a></h4>

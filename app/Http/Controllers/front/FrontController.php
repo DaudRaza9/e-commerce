@@ -196,7 +196,7 @@ class FrontController extends Controller
             ->select('products.id as product_id', 'product_attributes.id as attribute_id', 'products.name', 'products.slug', 'cart.quantity', 'products.image', 'sizes.size', 'colors.color', 'product_attributes.price')
             ->get();
 
-        return response()->json(['msg' => $msg,'data'=>$result,'totalItem'=>count($result)]);
+        return response()->json(['msg' => $msg, 'data' => $result, 'totalItem' => count($result)]);
     }
 
     public function cart(Request $request)
@@ -221,4 +221,25 @@ class FrontController extends Controller
 
         return view('front.cart', $result);
     }
+
+    public function category(Request $request,$slug){
+        $result['product']  = DB::table('products')
+            ->leftJoin('categories','categories.id','=','products.category_id')
+            ->where(['products.status' => 1])
+            ->where(['categories.category_slug' => $slug])
+            ->get();
+
+        foreach ($result['product'] as $list) {
+            $result['product_attributes'][$list->id] =
+                DB::table('product_attributes')
+                    ->leftJoin('sizes', 'sizes.id', '=', 'product_attributes.size_id')
+                    ->leftJoin('colors', 'colors.id', '=', 'product_attributes.color_id')
+                    ->where(['product_attributes.products_id' => $list->id])
+                    ->get();
+        }
+
+        return view('front.category',
+            $result
+        );
+}
 }

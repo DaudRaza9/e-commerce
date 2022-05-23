@@ -154,4 +154,5 @@ Route::get('/', [FrontController::class, 'index'])->name('index');
 Route::get('/product/{id}', [FrontController::class, 'product'])->name('product');
 Route::post('/add-to-cart', [FrontController::class, 'addToCart'])->name('add-to-cart');
 Route::get('/cart', [FrontController::class, 'cart'])->name('cart');
+Route::get('/category/{id}', [FrontController::class, 'category'])->name('category');
 

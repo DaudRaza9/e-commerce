@@ -17,7 +17,9 @@
     <link href="{{asset('front_assets/css/style.css')}}" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
-
+    <script>
+        var PRODUCT_IMAGE="{{asset('storage/products/')}}";
+    </script>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 </head>
@@ -47,7 +49,8 @@
                             <!-- start language -->
                             <div class="aa-language">
                                 <div class="dropdown">
-                                    <a class="btn dropdown-toggle" href="#" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <a class="btn dropdown-toggle" href="#" type="button" id="dropdownMenu1"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                         <img src="javascript:void(0)" alt="english flag">ENGLISH
                                         <span class="caret"></span>
                                     </a>
@@ -62,7 +65,8 @@
                             <!-- start currency -->
                             <div class="aa-currency">
                                 <div class="dropdown">
-                                    <a class="btn dropdown-toggle" href="#" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <a class="btn dropdown-toggle" href="#" type="button" id="dropdownMenu1"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                         <i class="fa fa-usd"></i>USD
                                         <span class="caret"></span>
                                     </a>
@@ -114,40 +118,47 @@
                         </div>
                         <!-- / logo  -->
                         <!-- cart box -->
+                        @php
+                        $getAddToCartTotalItem = getAddToCartTotalItem();
+
+                        $totalCartItem=count($getAddToCartTotalItem);
+
+                        $total_price=0;
+                        @endphp
                         <div class="aa-cartbox">
-                            <a class="aa-cart-link" href="#">
+                            <a class="aa-cart-link" href="#" id="cartBox">
                                 <span class="fa fa-shopping-basket"></span>
                                 <span class="aa-cart-title">SHOPPING CART</span>
-                                <span class="aa-cart-notify">2</span>
+                                <span class="aa-cart-notify">{{$totalCartItem}}</span>
                             </a>
                             <div class="aa-cartbox-summary">
+                            @if($totalCartItem)
+
+
                                 <ul>
+                                    @foreach($getAddToCartTotalItem as $cartItem)
+                                        {{ $total_price = $total_price+($cartItem->quantity*$cartItem->price)}}
                                     <li>
-                                        <a class="aa-cartbox-img" href="#"><img src="#" alt="img"></a>
+                                        <a class="aa-cartbox-img" href="#"><img src="{{asset('storage/products/'.$cartItem->image)}}" alt="img"></a>
                                         <div class="aa-cartbox-info">
-                                            <h4><a href="#">Product Name</a></h4>
-                                            <p>1 x $250</p>
+                                            <h4><a href="#">{{$cartItem->name}}</a></h4>
+                                            <p>{{$cartItem->quantity}} * Rs {{$cartItem->price}}</p>
                                         </div>
                                         <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
                                     </li>
-                                    <li>
-                                        <a class="aa-cartbox-img" href="#"><img src="#" alt="img"></a>
-                                        <div class="aa-cartbox-info">
-                                            <h4><a href="#">Product Name</a></h4>
-                                            <p>1 x $250</p>
-                                        </div>
-                                        <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
-                                    </li>
+                                    @endforeach
                                     <li>
                       <span class="aa-cartbox-total-title">
                         Total
                       </span>
                                         <span class="aa-cartbox-total-price">
-                        $500
+                        Rs {{$total_price}}
                       </span>
                                     </li>
                                 </ul>
-                                <a class="aa-cartbox-checkout aa-primary-btn" href="javascript:void(0)">Checkout</a>
+                                <a class="aa-cartbox-checkout aa-primary-btn" href="{{url('/checkout')}}">Checkout</a>
+
+                            @endif
                             </div>
                         </div>
                         <!-- / cart box -->
@@ -215,7 +226,8 @@
                     <label for="">Password<span>*</span></label>
                     <input type="password" placeholder="Password">
                     <button class="aa-browse-btn" type="submit">Login</button>
-                    <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme"> Remember me </label>
+                    <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme"> Remember me
+                    </label>
                     <p class="aa-lost-password"><a href="#">Lost your password?</a></p>
                     <div class="aa-register-now">
                         Don't have an account?<a href="javascript:void(0)">Register now!</a>

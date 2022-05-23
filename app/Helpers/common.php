@@ -63,3 +63,25 @@ function getUserTempId(){
         return session()->has('USER_TEMP_ID');
     }
 }
+
+function getAddToCartTotalItem(){
+    if (session()->has('FRONT_USER_LOGIN')) {
+        $uid = session()->get('FRONT_USER_LOGIN');
+        $user_type = "Reg";
+    } else {
+        $uid = getUserTempId();
+        $user_type = "Not-Reg";
+    }
+
+    $result  = DB::table('cart')
+        ->leftJoin('products', 'products.id', '=', 'cart.product_id')
+        ->leftJoin('product_attributes', 'product_attributes.id', '=', 'cart.product_attr_id')
+        ->leftJoin('sizes', 'sizes.id', '=', 'product_attributes.size_id')
+        ->leftJoin('colors', 'colors.id', '=', 'product_attributes.color_id')
+        ->where(['user_id' => $uid])
+        ->where(['user_type' => $user_type])
+        ->select('products.id as product_id', 'product_attributes.id as attribute_id', 'products.name', 'products.slug', 'cart.quantity', 'products.image', 'sizes.size', 'colors.color', 'product_attributes.price')
+        ->get();
+
+    return $result;
+}

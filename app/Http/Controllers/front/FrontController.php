@@ -185,7 +185,18 @@ class FrontController extends Controller
             ]);
             $msg = 'added';
         }
-        return response()->json(['msg' => $msg]);
+
+        $result = DB::table('cart')
+            ->leftJoin('products', 'products.id', '=', 'cart.product_id')
+            ->leftJoin('product_attributes', 'product_attributes.id', '=', 'cart.product_attr_id')
+            ->leftJoin('sizes', 'sizes.id', '=', 'product_attributes.size_id')
+            ->leftJoin('colors', 'colors.id', '=', 'product_attributes.color_id')
+            ->where(['user_id' => $uid])
+            ->where(['user_type' => $user_type])
+            ->select('products.id as product_id', 'product_attributes.id as attribute_id', 'products.name', 'products.slug', 'cart.quantity', 'products.image', 'sizes.size', 'colors.color', 'product_attributes.price')
+            ->get();
+
+        return response()->json(['msg' => $msg,'data'=>$result,'totalItem'=>count($result)]);
     }
 
     public function cart(Request $request)

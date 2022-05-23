@@ -419,7 +419,23 @@ function addToCart(id,size_str_id,color_str_id)
             data:jQuery('#fromAddToCart').serialize(),
             type:'post',
             success:function (result){
+                var totalPrice=0;
                 alert('Product '+result.msg);
+                if(result.totalItem===0){
+                    jQuery('.aa-cart-notify').html('0');
+                    jQuery('.aa-cartbox-summary').remove();
+                }else{
+                    jQuery('.aa-cart-notify').html(result.totalItem);
+                    var html='<ul>';
+                    jQuery.each(result.data, function(arrKey,arrVal){
+                        totalPrice=parseInt(totalPrice)+(parseInt(arrVal.quantity)*parseInt(arrVal.price));
+                        html+='<li><a class="aa-cartbox-img" href="#"><img src="'+PRODUCT_IMAGE+'/'+arrVal.image+'" alt="img"></a><div class="aa-cartbox-info"><h4><a href="#">'+arrVal.name+'</a></h4><p> '+arrVal.quantity+' * Rs  '+arrVal.price+'</p></div></li>';
+                    });
+                }
+                html+='<li><span class="aa-cartbox-total-title">Total</span><span class="aa-cartbox-total-price">Rs '+totalPrice+'</span></li>';
+                html+='</ul><a class="aa-cartbox-checkout aa-primary-btn" href="checkout">Checkout</a>';
+                console.log(html);
+                jQuery('.aa-cartbox-summary').html(html);
             }
 
         });

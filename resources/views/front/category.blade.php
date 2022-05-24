@@ -12,7 +12,7 @@
                 <div class="aa-catg-head-banner-content">
                     <h2>Fashion</h2>
                     <ol class="breadcrumb">
-                        <li><a href="index.html">Home</a></li>
+                        <li><a href="">Home</a></li>
                         <li class="active">Women</li>
                     </ol>
                 </div>
@@ -31,12 +31,14 @@
                             <div class="aa-product-catg-head-left">
                                 <form action="" class="aa-sort-form">
                                     <label for="">Sort by</label>
-                                    <select name="">
+                                    <select name="" onchange="sort_by()" id="sory_by">
                                         <option value="1" selected="Default">Default</option>
-                                        <option value="2">Name</option>
-                                        <option value="3">Price</option>
-                                        <option value="4">Date</option>
+                                        <option value="name">Name</option>
+                                        <option value="price_desc">Price - Desc </option>
+                                        <option value="price_asc">Price - Asc </option>
+                                        <option value="date">Date</option>
                                     </select>
+                                    {{$sort_txt}}
                                 </form>
                                 <form action="" class="aa-show-form">
                                     <label for="">Show</label>
@@ -62,7 +64,7 @@
                                             @foreach($product as $productArray)
                                                 <li>
                                                     <figure>
-                                                        <a class="aa-product-img" href="{{url('product/'.$productArray->slug)}}"><img
+                                                        <a class="aa-product-img h-100" href="{{url('product/'.$productArray->slug)}}"><img
                                                                 src="{{asset('storage/products/'.$productArray->image)}}"
                                                                 alt="{{$productArray->name}}"></a>
                                                         <a class="aa-add-card-btn" href="javascript:void(0)" onclick="homeAddToCart('{{$productArray->id}}',
@@ -103,7 +105,7 @@
                                                             <div class="simpleLens-container">
                                                                 <div class="simpleLens-big-image-container">
                                                                     <a class="simpleLens-lens-image" data-lens-image="img/view-slider/large/polo-shirt-1.png">
-                                                                        <img src="img/view-slider/medium/polo-shirt-1.png" class="simpleLens-big-image">
+                                                                        <img src="{{asset('front_assets/img/view-slider/medium/polo-shirt-1.png')}}" class="simpleLens-big-image">
                                                                     </a>
                                                                 </div>
                                                             </div>
@@ -111,18 +113,18 @@
                                                                 <a href="#" class="simpleLens-thumbnail-wrapper"
                                                                    data-lens-image="img/view-slider/large/polo-shirt-1.png"
                                                                    data-big-image="img/view-slider/medium/polo-shirt-1.png">
-                                                                    <img src="img/view-slider/thumbnail/polo-shirt-1.png">
+                                                                    <img src="{{asset('front_assets/img/view-slider/thumbnail/polo-shirt-1.png')}}">
                                                                 </a>
                                                                 <a href="#" class="simpleLens-thumbnail-wrapper"
                                                                    data-lens-image="img/view-slider/large/polo-shirt-3.png"
                                                                    data-big-image="img/view-slider/medium/polo-shirt-3.png">
-                                                                    <img src="img/view-slider/thumbnail/polo-shirt-3.png">
+                                                                    <img src="{{asset('front_assets/img/view-slider/thumbnail/polo-shirt-3.png')}}'">
                                                                 </a>
 
                                                                 <a href="#" class="simpleLens-thumbnail-wrapper"
                                                                    data-lens-image="img/view-slider/large/polo-shirt-4.png"
                                                                    data-big-image="img/view-slider/medium/polo-shirt-4.png">
-                                                                    <img src="img/view-slider/thumbnail/polo-shirt-4.png">
+                                                                    <img src="{{asset('front_assets/img/view-slider/thumbnail/polo-shirt-4.png')}}">
                                                                 </a>
                                                             </div>
                                                         </div>
@@ -201,11 +203,17 @@
                         <div class="aa-sidebar-widget">
                             <h3>Category</h3>
                             <ul class="aa-catg-nav">
-                                <li><a href="#">Men</a></li>
-                                <li><a href="">Women</a></li>
-                                <li><a href="">Kids</a></li>
-                                <li><a href="">Electornics</a></li>
-                                <li><a href="">Sports</a></li>
+                                @foreach($categories as $item)
+                                    @if($slug==$item->category_slug)
+                                <li>
+                                    <a class="left_cat_active" href="{{url('category/'.$item->category_slug)}}">{{$item->category_name}}</a>
+                                </li>
+                                    @else
+                                        <li>
+                                            <a href="{{url('category/'.$item->category_slug)}}">{{$item->category_name}}</a>
+                                        </li>
+                                    @endif
+                                @endforeach
                             </ul>
                         </div>
                         <!-- single sidebar -->
@@ -231,7 +239,7 @@
                                     </div>
                                     <span id="skip-value-lower" class="example-val">30.00</span>
                                     <span id="skip-value-upper" class="example-val">100.00</span>
-                                    <button class="aa-filter-btn" type="submit">Filter</button>
+                                    <button class="aa-filter-btn" type="button" onclick="sort_price_filter()">Filter</button>
                                 </form>
                             </div>
 
@@ -240,18 +248,16 @@
                         <div class="aa-sidebar-widget">
                             <h3>Shop By Color</h3>
                             <div class="aa-color-tag">
-                                <a class="aa-color-green" href="#"></a>
-                                <a class="aa-color-yellow" href="#"></a>
-                                <a class="aa-color-pink" href="#"></a>
-                                <a class="aa-color-purple" href="#"></a>
-                                <a class="aa-color-blue" href="#"></a>
-                                <a class="aa-color-orange" href="#"></a>
-                                <a class="aa-color-gray" href="#"></a>
-                                <a class="aa-color-black" href="#"></a>
-                                <a class="aa-color-white" href="#"></a>
-                                <a class="aa-color-cyan" href="#"></a>
-                                <a class="aa-color-olive" href="#"></a>
-                                <a class="aa-color-orchid" href="#"></a>
+                                @foreach($colors as $color)
+
+                                    @if(in_array($color->id,$colorFilterArray))
+                                        <a class="aa-color-{{strtolower($color->color)}} active_color" href="javascript:void(0)" onclick="setColor('{{$color->id}}',1)"></a>
+                                    @else
+                                        <a class="aa-color-{{strtolower($color->color)}}" href="javascript:void(0)" onclick="setColor('{{$color->id}}',0)"></a>
+                                    @endif
+
+
+                                @endforeach
                             </div>
                         </div>
 
@@ -274,5 +280,11 @@
         <input type="hidden" id="product_id" name="product_id">
 
     </form>
-
+    <form action="" id="categoryFilter">
+        @csrf
+        <input type="hidden" id="sort" name="sort" value="{{$sort}}">
+        <input type="hidden" id="filter_price_start" name="filter_price_start" value="{{$filter_price_start}}">
+        <input type="hidden" id="filter_price_end" name="filter_price_end" value="{{$filter_price_end}}">
+        <input type="hidden" id="color_filter" name="color_filter" value="{{$color_filter}}" >
+    </form>
 @endsection

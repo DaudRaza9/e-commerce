@@ -240,23 +240,30 @@ jQuery(function($){
     jQuery(function(){
       if($('body').is('.productPage')){
        var skipSlider = document.getElementById('skipstep');
-        noUiSlider.create(skipSlider, {
+       var filter_price_start = jQuery('#filter_price_start').val();
+       var filter_price_end = jQuery('#filter_price_end').val();
+      if (filter_price_start == '' || filter_price_end =='')
+      {
+          var filter_price_start = 100;
+          var filter_price_end = 2200;
+      }
+       noUiSlider.create(skipSlider, {
             range: {
                 'min': 0,
-                '10%': 10,
-                '20%': 20,
-                '30%': 30,
-                '40%': 40,
-                '50%': 50,
-                '60%': 60,
-                '70%': 70,
-                '80%': 80,
-                '90%': 90,
-                'max': 100
+                '10%': 100,
+                '20%': 300,
+                '30%': 500,
+                '40%': 700,
+                '50%': 900,
+                '60%': 1100,
+                '70%': 1500,
+                '80%': 1800,
+                '90%': 2000,
+                'max': 2200
             },
             snap: true,
             connect: true,
-            start: [20, 70]
+            start: [filter_price_start, filter_price_end]
         });
         // for value print
         var skipValues = [
@@ -461,4 +468,30 @@ function deleteCartProduct (product_id,size,color,attribute_id)
     addToCart(product_id,size,color);
     // jQuery('#total_price_'+attribute_id).html('Rs '+quantity*price);
     jQuery('#cart_box'+attribute_id).remove();
+}
+
+function sort_by()
+{
+    var sort_by = jQuery('#sory_by').val();
+    jQuery('#sort').val((sort_by));
+    jQuery('#categoryFilter').submit();
+}
+function sort_price_filter()
+{
+    jQuery('#filter_price_start').val(jQuery('#skip-value-lower').html());
+    jQuery('#filter_price_end').val(jQuery('#skip-value-upper').html());
+    jQuery('#categoryFilter').submit();
+}
+
+function setColor(color,type){
+    var color_str=jQuery('#color_filter').val();
+    if(type===1){
+        var new_color_str=color_str.replace(color+':','');
+        jQuery('#color_filter').val(new_color_str);
+    }else if (type===0){
+       jQuery('#color_filter').val(color+':'+color_str);
+        jQuery('#categoryFilter').submit();
+    }
+
+    jQuery('#categoryFilter').submit();
 }

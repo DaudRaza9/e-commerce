@@ -2030,7 +2030,7 @@ img {
 }
 #aa-product-category .aa-product-catg-content .aa-product-catg-body .aa-product-catg li {
   margin: 0 0 20px 30px;
-  width: 29.916%;
+  width: 28.916%;
 }
 #aa-product-category .aa-product-catg-content .aa-product-catg-body .aa-product-catg li .aa-product-descrip {
   display: none;
@@ -4195,8 +4195,18 @@ img {
 .aa-color-purple{
     background-color: purple;
 }
-
-
+.aa-color-skyblue{
+    background-color: #337ab7;
+}
+.aa-color-grey{
+    background-color: grey;
+}
+.active_color{
+    border: 3px solid green;
+}
+.left_cat_active{
+    color: #ff6666;
+}
 /*Helping Classes*/
 
 .w-100{

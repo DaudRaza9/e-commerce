@@ -222,24 +222,81 @@ class FrontController extends Controller
         return view('front.cart', $result);
     }
 
-    public function category(Request $request,$slug){
-        $result['product']  = DB::table('products')
-            ->leftJoin('categories','categories.id','=','products.category_id')
-            ->where(['products.status' => 1])
-            ->where(['categories.category_slug' => $slug])
+    public function category(Request $request, $slug)
+    {
+        $sort = "";
+        $sort_txt = "";
+        $filter_price_start = "";
+        $filter_price_end = "";
+        $color_filter = "";
+        $colorFilterArray = [];
+        if ($request->get('sort') !== null) {
+            $sort = $request->get('sort');
+        }
+
+        $query = DB::table('products');
+        $query = $query->leftJoin('categories', 'categories.id', '=', 'products.category_id');
+        $query = $query->leftJoin('product_attributes', 'products.id', '=', 'product_attributes.products_id');
+        $query = $query->where(['products.status' => 1]);
+        $query = $query->where(['categories.category_slug' => $slug]);
+        if ($sort == 'name') {
+            $query = $query->orderBy('products.name', 'asc');
+            $sort_txt = "Product Name";
+        }
+        if ($sort == 'date') {
+            $query = $query->orderBy('products.id', 'desc');
+            $sort_txt = "Date";
+        }
+        if ($sort == 'price_desc') {
+            $query = $query->orderBy('product_attributes.price', 'desc');
+            $sort_txt = "Price - DESC";
+        }
+        if ($sort == 'price_asc') {
+            $query = $query->orderBy('product_attributes.price', 'asc');
+            $sort_txt = "Price - ASC";
+        }
+        if ($request->get('filter_price_start') !== null && $request->get('filter_price_end') !== null) {
+            $filter_price_start = $request->get('filter_price_start');
+            $filter_price_end = $request->get('filter_price_end');
+            if ($filter_price_start > 0 && $filter_price_end) {
+                $query = $query->whereBetween('product_attributes.price', [$filter_price_start, $filter_price_end]);
+            }
+        }
+        if ($request->get('color_filter') !== null) {
+            $color_filter = $request->get('color_filter');
+            $colorFilterArray = explode(":", $color_filter);
+            $colorFilterArray = array_filter($colorFilterArray);
+            $query = $query->where(['product_attributes.color_id' => $request->get('color_filter')]);
+        }
+        $query = $query->select('products.*');
+        $query = $query->get();
+        $result['product'] = $query;
+        foreach ($result['product'] as $list) {
+            $query1 = DB::table('product_attributes');
+            $query1 = $query1->leftJoin('sizes', 'sizes.id', '=', 'product_attributes.size_id');
+            $query1 = $query1->leftJoin('colors', 'colors.id', '=', 'product_attributes.color_id');
+            $query1 = $query1->where(['product_attributes.products_id' => $list->id]);
+
+            $query1 = $query1->get();
+            $result['product_attributes'][$list->id] = $query1;
+        }
+        $result['colors'] = DB::table('colors')
+            ->where(['status' => 1])
+            ->get();
+        $result['categories'] = DB::table('categories')
+            ->where(['status' => 1])
             ->get();
 
-        foreach ($result['product'] as $list) {
-            $result['product_attributes'][$list->id] =
-                DB::table('product_attributes')
-                    ->leftJoin('sizes', 'sizes.id', '=', 'product_attributes.size_id')
-                    ->leftJoin('colors', 'colors.id', '=', 'product_attributes.color_id')
-                    ->where(['product_attributes.products_id' => $list->id])
-                    ->get();
-        }
+        $result['sort'] = $sort;
+        $result['slug'] = $slug;
+        $result['sort_txt'] = $sort_txt;
+        $result['filter_price_start'] = $filter_price_start;
+        $result['filter_price_end'] = $filter_price_end;
+        $result['color_filter'] = $color_filter;
+        $result['colorFilterArray'] = $colorFilterArray;
 
         return view('front.category',
             $result
         );
-}
+    }
 }

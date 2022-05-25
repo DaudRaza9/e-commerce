@@ -153,6 +153,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 Route::get('/', [FrontController::class, 'index'])->name('index');
 Route::get('/product/{id}', [FrontController::class, 'product'])->name('product');
 Route::post('/add-to-cart', [FrontController::class, 'addToCart'])->name('add-to-cart');
+Route::post('/registration_process', [FrontController::class, 'registration_process'])->name('registration_process');
+Route::post('/login_process', [FrontController::class, 'login_process'])->name('login_process');
+Route::get('/registration', [FrontController::class, 'registration'])->name('registration');
 Route::get('/cart', [FrontController::class, 'cart'])->name('cart');
 Route::get('/category/{id}', [FrontController::class, 'category'])->name('category');
+Route::get('/search/{str}', [FrontController::class, 'search'])->name('search');
+Route::get('logout', function () {
+    session()->forget('FRONT_USER_LOGIN');
+    session()->forget('FRONT_USER_ID');
+    session()->forget('FRONT_USER_NAME');
+    return redirect('/');
+});
 

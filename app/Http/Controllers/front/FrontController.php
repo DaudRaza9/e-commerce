@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Crypt;
 
 class FrontController extends Controller
 {
@@ -298,5 +300,109 @@ class FrontController extends Controller
         return view('front.category',
             $result
         );
+    }
+
+    public function search(Request $request, $str)
+    {
+        $result['product'] =
+        $query = DB::table('products');
+        $query = $query->leftJoin('categories', 'categories.id', '=', 'products.category_id');
+        $query = $query->leftJoin('product_attributes', 'products.id', '=', 'product_attributes.products_id');
+        $query = $query->where(['products.status' => 1]);
+        $query = $query->where('name' ,'like',"%$str%");
+        $query = $query->orwhere('model' ,'like',"%$str%");
+        $query = $query->orwhere('short_desc' ,'like',"%$str%");
+        $query = $query->orwhere('desc' ,'like',"%$str%");
+        $query = $query->orwhere('keywords' ,'like',"%$str%");
+        $query = $query->orwhere('technical_specification' ,'like',"%$str%");
+        $query = $query->select('products.*');
+        $query = $query->get();
+        $result['product'] = $query;
+        foreach ($result['product'] as $list) {
+            $query1 = DB::table('product_attributes');
+            $query1 = $query1->leftJoin('sizes', 'sizes.id', '=', 'product_attributes.size_id');
+            $query1 = $query1->leftJoin('colors', 'colors.id', '=', 'product_attributes.color_id');
+            $query1 = $query1->where(['product_attributes.products_id' => $list->id]);
+            $query1 = $query1->get();
+            $result['product_attributes'][$list->id] = $query1;
+        }
+
+        return view('front.search', $result);
+    }
+
+    public function registration(Request $request)
+    {
+        if($request->session()->has('FRONT_USER_LOGIN')!=null)
+        {
+            return redirect('/');
+        }
+//
+            return view('front.registration');
+
+
+    }
+
+    public function registration_process(Request $request)
+    {
+        $validate = Validator::make($request->all(),[
+            'name'=>'required',
+            'email'=>'required|email|unique:customers,email',
+            'password'=>'required',
+            'mobile'=>'required|numeric|digits:10',
+        ]);
+
+        if(!$validate->passes()){
+            return response()->json(['status'=>'error','error'=>$validate->errors()->toArray()]);
+        }else{
+            $array=[
+                "name"=>$request->name,
+                "email"=>$request->email,
+                "password"=>Crypt::encrypt($request->password),
+                "mobile"=>$request->mobile,
+                "status"=>1,
+                "created_at"=>date('Y-m-d h:i:s'),
+                "updated_at"=>date('Y-m-d h:i:s'),
+            ];
+            $query = DB::table('customers')->insert($array);
+            if($query)
+            {
+                return response()->json(['status'=>'success','msg'=>"user has been registered successfully"]);
+            }
+        }
+    }
+
+    public function login_process(Request $request)
+    {
+
+        $result=DB::table('customers')
+            ->where(['email'=>$request->str_login_email])
+            ->get();
+
+        if(isset($result[0])){
+            $db_pwd=Crypt::decrypt($result[0]->password);
+            if($db_pwd==$request->str_login_password){
+                $request->session()->put('FRONT_USER_LOGIN',true);
+                $request->session()->put('FRONT_USER_ID',$result[0]->id);
+                $request->session()->put('FRONT_USER_NAME',$result[0]->name);
+                $status="success";
+                $msg="";
+            }else{
+                $status="error";
+                $msg="Please enter valid password";
+            }
+        }else{
+            $status="error";
+            $msg="Please enter valid email id";
+        }
+        return response()->json(['status'=>$status,'msg'=>$msg]);
+
+    }
+
+    public function logout(Request $request)
+    {
+        $request->session()->forget('FRONT_USER_LOGIN');
+        $request->session()->forget('FRONT_USER_ID');
+        $request->session()->forget('FRONT_USER_NAME');
+        return redirect('/');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Crypt;
 
@@ -354,19 +355,29 @@ class FrontController extends Controller
         if(!$validate->passes()){
             return response()->json(['status'=>'error','error'=>$validate->errors()->toArray()]);
         }else{
+            $rand_id=rand(1111111111,9999999999);
             $array=[
                 "name"=>$request->name,
                 "email"=>$request->email,
                 "password"=>Crypt::encrypt($request->password),
                 "mobile"=>$request->mobile,
                 "status"=>1,
+                "is_verify"=>0,
+                "rand_id"=>$rand_id,
                 "created_at"=>date('Y-m-d h:i:s'),
                 "updated_at"=>date('Y-m-d h:i:s'),
             ];
             $query = DB::table('customers')->insert($array);
             if($query)
             {
-                return response()->json(['status'=>'success','msg'=>"user has been registered successfully"]);
+                $data=['name'=>$request->name,'rand_id'=>$rand_id];
+                $user['to']=$request->email;
+                Mail::send('front.email_verification',$data,function($messages)use
+                ($user){
+                    $messages->to($user['to']);
+                    $messages->subject('Email Verification');
+                });
+                return response()->json(['status'=>'success','msg'=>"user has been registered successfully & please check your inbox for verification email."]);
             }
         }
     }
@@ -380,7 +391,31 @@ class FrontController extends Controller
 
         if(isset($result[0])){
             $db_pwd=Crypt::decrypt($result[0]->password);
+            $status=$result[0]->status;
+            $is_verify=$result[0]->is_verify;
+            if($is_verify==0)
+            {
+                return response()->json(['status'=>"error",'msg'=>"please verify your email"]);
+            }
+            if($status==0)
+            {
+                return response()->json(['status'=>"error",'msg'=>"Your account has been deactivated.."]);
+            }
             if($db_pwd==$request->str_login_password){
+                if($request->rememberme === null)
+                {
+                    setcookie('login_email',$request->str_login_email,
+                        100);
+                    setcookie('login_pwd',$request->str_login_password,
+                        100);
+
+                }
+                else{
+                    setcookie('login_email',$request->str_login_email,
+                    time()+60*60*24*100);
+                    setcookie('login_pwd',$request->str_login_password,
+                    time()+60*60*24*100);
+                }
                 $request->session()->put('FRONT_USER_LOGIN',true);
                 $request->session()->put('FRONT_USER_ID',$result[0]->id);
                 $request->session()->put('FRONT_USER_NAME',$result[0]->name);
@@ -390,7 +425,8 @@ class FrontController extends Controller
                 $status="error";
                 $msg="Please enter valid password";
             }
-        }else{
+        }
+        else{
             $status="error";
             $msg="Please enter valid email id";
         }
@@ -404,5 +440,82 @@ class FrontController extends Controller
         $request->session()->forget('FRONT_USER_ID');
         $request->session()->forget('FRONT_USER_NAME');
         return redirect('/');
+    }
+
+    public function email_verification(Request $request,$id)
+    {
+        $result=DB::table('customers')
+            ->where(['rand_id'=>$id])
+            ->where(['is_verify'=>0])
+            ->get();
+         if(isset($result[0]))
+         {
+             $result=DB::table('customers')
+                 ->where(['id'=>$result[0]->id])
+                 ->update(['is_verify'=>1,'rand_id'=>'']);
+             return view('front.verification');
+         }
+         else{
+             return redirect('/');
+         }
+    }
+
+    public function forget_password(Request $request)
+    {
+
+        $result=DB::table('customers')
+            ->where(['email'=>$request->str_forget_email])
+            ->get();
+        $rand_id = rand(1111111111,999999999);
+        if(isset($result[0])){
+            DB::table('customers')
+                ->where(['email'=>$request->str_forget_email])
+                ->update(['is_forget_password'=>1,'rand_id'=>$rand_id]);
+
+            $data=['name'=>$result[0]->name,'rand_id'=>$rand_id];
+            $user['to']=$request->str_forget_email;
+            Mail::send('front.forget-email',$data,function($messages)use
+            ($user){
+                $messages->to($user['to']);
+                $messages->subject('Forget Password');
+            });
+            return response()->json(['status'=>'success','msg'=>"please check your inbox"]);
+
+        }
+        else
+        {
+            return response()->json(['status'=>'error','msg'=>"Email id not registered!!!--"]);
+        }
+    }
+
+    public function forget_password_change(Request $request,$id)
+    {
+        $result=DB::table('customers')
+            ->where(['rand_id'=>$id])
+            ->where(['is_forget_password'=>1])
+            ->get();
+        if(isset($result[0]))
+        {
+            $request->session()->put('FORGET_PASSWORD_USER_ID',$result[0]->id);
+            return view('front.forget-password');
+        }
+        else{
+            return redirect('/');
+        }
+    }
+
+    public function forget_password_change_process(Request $request)
+    {
+//        dd($request->all());
+        $result=DB::table('customers')
+            ->where(['id'=>$request->session()->get('FORGET_PASSWORD_USER_ID')])
+            ->update([
+                'is_forget_password'=>0,
+                'rand_id'=>'',
+                'password'=> Crypt::encrypt($request->password),
+            ]);
+
+        return response()->json(['status'=>'success','msg'=>"Password change"]);
+
     }
 }

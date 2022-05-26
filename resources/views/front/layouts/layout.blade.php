@@ -18,7 +18,7 @@
     <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
     <script>
-        var PRODUCT_IMAGE="{{asset('storage/products/')}}";
+        var PRODUCT_IMAGE = "{{asset('storage/products/')}}";
     </script>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -107,11 +107,11 @@
                         <!-- / logo  -->
                         <!-- cart box -->
                         @php
-                        $getAddToCartTotalItem = getAddToCartTotalItem();
+                            $getAddToCartTotalItem = getAddToCartTotalItem();
 
-                        $totalCartItem=count($getAddToCartTotalItem);
+                            $totalCartItem=count($getAddToCartTotalItem);
 
-                        $total_price=0;
+                            $total_price=0;
                         @endphp
                         <div class="aa-cartbox">
                             <a class="aa-cart-link" href="#" id="cartBox">
@@ -120,33 +120,35 @@
                                 <span class="aa-cart-notify">{{$totalCartItem}}</span>
                             </a>
                             <div class="aa-cartbox-summary">
-                            @if($totalCartItem)
+                                @if($totalCartItem)
 
 
-                                <ul>
-                                    @foreach($getAddToCartTotalItem as $cartItem)
-                                        {{ $total_price = $total_price+($cartItem->quantity*$cartItem->price)}}
-                                    <li>
-                                        <a class="aa-cartbox-img" href="#"><img src="{{asset('storage/products/'.$cartItem->image)}}" alt="img"></a>
-                                        <div class="aa-cartbox-info">
-                                            <h4><a href="#">{{$cartItem->name}}</a></h4>
-                                            <p>{{$cartItem->quantity}} * Rs {{$cartItem->price}}</p>
-                                        </div>
-                                        <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
-                                    </li>
-                                    @endforeach
-                                    <li>
+                                    <ul>
+                                        @foreach($getAddToCartTotalItem as $cartItem)
+                                            {{ $total_price = $total_price+($cartItem->quantity*$cartItem->price)}}
+                                            <li>
+                                                <a class="aa-cartbox-img" href="#"><img
+                                                        src="{{asset('storage/products/'.$cartItem->image)}}" alt="img"></a>
+                                                <div class="aa-cartbox-info">
+                                                    <h4><a href="#">{{$cartItem->name}}</a></h4>
+                                                    <p>{{$cartItem->quantity}} * Rs {{$cartItem->price}}</p>
+                                                </div>
+                                                <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
+                                            </li>
+                                        @endforeach
+                                        <li>
                       <span class="aa-cartbox-total-title">
                         Total
                       </span>
-                                        <span class="aa-cartbox-total-price">
+                                            <span class="aa-cartbox-total-price">
                         Rs {{$total_price}}
                       </span>
-                                    </li>
-                                </ul>
-                                <a class="aa-cartbox-checkout aa-primary-btn" href="{{url('/checkout')}}">Checkout</a>
+                                        </li>
+                                    </ul>
+                                    <a class="aa-cartbox-checkout aa-primary-btn"
+                                       href="{{url('/checkout')}}">Checkout</a>
 
-                            @endif
+                                @endif
                             </div>
                         </div>
                         <!-- / cart box -->
@@ -201,32 +203,70 @@
 @extends('front.layouts.footer')
 <!-- / footer -->
 
+@php
+    if(isset($_COOKIE['login_email']) && isset($_COOKIE['login_pwd']))
+        {
+            $login_email=$_COOKIE['login_email'];
+            $login_pwd=$_COOKIE['login_pwd'];
+            $is_remember = "checked='checked'";
+        }
+        else
+            {
+                $login_email='';
+                $login_pwd='';
+                $is_remember='';
+            }
+@endphp
 <!-- Login Modal -->
 <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4>Login or Register</h4>
-                <form class="aa-login-form" action="" id="frmLogin">
-                    @csrf
-                    <label for="">Email address<span>*</span></label>
-                    <input type="email" placeholder="email" name="str_login_email" required>
-                    <label for="">Password<span>*</span></label>
-                    <input type="password" placeholder="Password" name="str_login_password">
-                    <button id="btnLogin" class="aa-browse-btn" type="submit">Login</button>
+                <div id="popup_login">
+                    <h4>Login or Register</h4>
+                    <form class="aa-login-form" action="" id="frmLogin">
+                        @csrf
+                        <label for="">Email address<span>*</span></label>
+                        <input type="email" placeholder="email" name="str_login_email" required
+                               value="{{$login_email}}">
+                        <label for="">Password<span>*</span></label>
+                        <input type="password" placeholder="Password" name="str_login_password" value="{{$login_pwd}}">
+                        <button id="btnLogin" class="aa-browse-btn" type="submit">Login</button>
 
-                    <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme"> Remember me
-                    </label>
+                        <label for="rememberme" class="rememberme"><input type="checkbox"
+                                                                          {{$is_remember}} name="rememberme"
+                                                                          id="rememberme">
+                            Remember me
+                        </label>
 
-                    <div  id="login_msg"></div>
+                        <div id="login_msg"></div>
 
-                    <p class="aa-lost-password"><a href="#">Lost your password?</a></p>
-                    <div class="aa-register-now">
-                        Don't have an account?<a href="{{url('registration')}}">Register now!</a>
-                    </div>
+                        <p class="aa-lost-password"><a href="javascript:void(0)" onclick="forgot_password()">Lost your
+                                password?</a></p>
+                        <div class="aa-register-now">
+                            Don't have an account?<a href="{{url('registration')}}">Register now!</a>
+                        </div>
 
-                </form>
+                    </form>
+                </div>
+                <div id="popup_forget" style="display: none;">
+                    <h4>Forgot password</h4>
+                    <form class="aa-login-form" action="" id="frmForget">
+                        @csrf
+                        <label for="">Email<span>*</span></label>
+                        <input type="email" placeholder="email" name="str_forget_email" required
+                                >
+                        <button id="btnForget" class="aa-browse-btn" type="submit">Login</button>
+                        <div id="forget_msg"></div>
+                        <br><br>
+                        <div class="aa-register-now">
+                           login?<a href="javascript:void(0)" onclick="show_login_popup()">Login now!</a>
+                        </div>
+
+                    </form>
+
+                </div>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

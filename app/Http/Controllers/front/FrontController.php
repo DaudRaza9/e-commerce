@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Crypt;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class FrontController extends Controller
 {
@@ -135,7 +136,7 @@ class FrontController extends Controller
     public function addToCart(Request $request)
     {
         if ($request->session()->has('FRONT_USER_LOGIN')) {
-            $uid = $request->session()->get('FRONT_USER_LOGIN');
+            $uid = $request->session()->get('FRONT_USER_ID');
             $user_type = "Reg";
         } else {
             $uid = getUserTempId();
@@ -205,7 +206,7 @@ class FrontController extends Controller
     public function cart(Request $request)
     {
         if ($request->session()->has('FRONT_USER_LOGIN')) {
-            $uid = $request->session()->get('FRONT_USER_LOGIN');
+            $uid = $request->session()->get('FRONT_USER_ID');
             $user_type = "Reg";
         } else {
             $uid = getUserTempId();
@@ -421,6 +422,10 @@ class FrontController extends Controller
                 $request->session()->put('FRONT_USER_NAME',$result[0]->name);
                 $status="success";
                 $msg="";
+                $getUserTempId= getUserTempId();
+                DB::table('cart')
+                    ->where(['user_id'=>$getUserTempId,'user_type'=>'Not-Reg'])
+                    ->update(['user_id'=>$result[0]->id,'user_type'=>'Reg']);
             }else{
                 $status="error";
                 $msg="Please enter valid password";
@@ -517,5 +522,41 @@ class FrontController extends Controller
 
         return response()->json(['status'=>'success','msg'=>"Password change"]);
 
+    }
+
+    public function checkout(Request $request)
+    {
+        $result['cart_data'] = getAddToCartTotalItem();
+
+        if(isset($result['cart_data'][0]))
+        {
+            if ($request->session()->has('FRONT_USER_LOGIN')) {
+            $uid = $request->session()->get('FRONT_USER_ID');
+            $customer_info = DB::table('customers')
+                ->where(['id'=>$uid])
+                ->get();
+            $result['customer']['name']=$customer_info[0]->name;
+            $result['customer']['email']=$customer_info[0]->email;
+            $result['customer']['mobile']=$customer_info[0]->mobile;
+            $result['customer']['address']=$customer_info[0]->address;
+            $result['customer']['city']=$customer_info[0]->city;
+            $result['customer']['state']=$customer_info[0]->state;
+            $result['customer']['zip']=$customer_info[0]->zip;
+            }
+            else {
+                $result['customer']['name']='';
+                $result['customer']['email']='';
+                $result['customer']['mobile']='';
+                $result['customer']['address']='';
+                $result['customer']['city']='';
+                $result['customer']['state']='';
+                $result['customer']['zip']='';
+
+            }
+            return view('front.checkout',$result);
+        }
+        else{
+            return redirect('/');
+        }
     }
 }

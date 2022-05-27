@@ -146,7 +146,7 @@
                                         </li>
                                     </ul>
                                     <a class="aa-cartbox-checkout aa-primary-btn"
-                                       href="{{url('/checkout')}}">Checkout</a>
+                                       href="{{url('/cart')}}">Cart</a>
 
                                 @endif
                             </div>

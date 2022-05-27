@@ -163,6 +163,7 @@ Route::get('logout', function () {
     session()->forget('FRONT_USER_LOGIN');
     session()->forget('FRONT_USER_ID');
     session()->forget('FRONT_USER_NAME');
+    session()->forget('USER_TEMP_ID');
     return redirect('/');
 });
 
@@ -170,3 +171,4 @@ Route::get('/verification/{id}', [FrontController::class, 'email_verification'])
 Route::post('/forget_password', [FrontController::class, 'forget_password'])->name('forget_password');
 Route::post('forget_password_change_process', [FrontController::class, 'forget_password_change_process'])->name('forget_password_change_process');
 Route::get('/forget_password_change/{id}', [FrontController::class, 'forget_password_change'])->name('forget_password_change');
+Route::get('/checkout', [FrontController::class, 'checkout'])->name('checkout');

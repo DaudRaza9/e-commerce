@@ -34,7 +34,6 @@ function buildTreeView($arr,$parent,$level=0,$prelevel= -1){
                 }else{
                     $html.='<ul class="dropdown-menu">';
                 }
-
             }
             if($level==$prelevel){
                 $html.='</li>';
@@ -55,19 +54,19 @@ function buildTreeView($arr,$parent,$level=0,$prelevel= -1){
 }
 
 function getUserTempId(){
-    if(session()->has('USER_TEMP_ID')===null){
+    if(!session()->has('USER_TEMP_ID')){
         $rand=rand(111111111,999999999);
         session()->put('USER_TEMP_ID',$rand);
         return $rand;
-
-    }else{
-        return session()->has('USER_TEMP_ID');
+    }
+    else{
+        return session()->get('USER_TEMP_ID');
     }
 }
 
 function getAddToCartTotalItem(){
     if (session()->has('FRONT_USER_LOGIN')) {
-        $uid = session()->get('FRONT_USER_LOGIN');
+        $uid = session()->get('FRONT_USER_ID');
         $user_type = "Reg";
     } else {
         $uid = getUserTempId();

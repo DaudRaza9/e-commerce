@@ -1,6 +1,6 @@
-@extends('front.layouts.layout')
+@extends('front.layouts.master')
 @section('page_title','Search')
-@section('container')
+@section('content')
 
 
 

@@ -1,6 +1,6 @@
-@extends('front.layouts.layout')
+@extends('front.layouts.master')
 @section('page_title','Checkout')
-@section('container')
+@section('content')
 
     <!-- catg header banner section -->
     <section id="aa-catg-head-banner">
@@ -19,7 +19,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="checkout-area">
-                        <form action="">
+                        <form id="frmPlaceOrder">
+                            @csrf
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="checkout-left">
@@ -70,32 +71,28 @@
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <div class="aa-checkout-single-bill">
-                                                                    <textarea cols="8" rows="3" name="address" required>{{$customer['address']}}</textarea>
+                                                                    <textarea cols="8" rows="3" name="address">{{$customer['address']}}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         <div class="row">
+
                                                             <div class="col-md-6">
                                                                 <div class="aa-checkout-single-bill">
-                                                                    <input type="text" placeholder="Appartment, Suite etc.">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="aa-checkout-single-bill">
-                                                                    <input type="text" placeholder="City / Town*" value="{{$customer['city']}}" name="city" required>
+                                                                    <input type="text" placeholder="City / Town*"  name="city"  value="{{$customer['city']}}">
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="aa-checkout-single-bill">
-                                                                    <input type="text" placeholder="state*" value="{{$customer['state']}}" required name="state">
+                                                                    <input type="text"  name="state" placeholder="state*"  value="{{$customer['state']}}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="aa-checkout-single-bill">
-                                                                    <input type="text" placeholder="Postcode / ZIP*" value="{{$customer['zip']}}" required name="zip">
+                                                                    <input type="text" placeholder="Postcode / ZIP*" name="zip" value="{{$customer['zip']}}"  >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -140,9 +137,13 @@
                                                 <tfoot>
 
 
+                                                <tr class="hide show_coupon_box">
+                                                    <th>Coupon Code <a href="javascript:void(0)" onclick="remove_coupon_code()" class="remove_coupon_code">Remove coupon code</a> </th>
+                                                    <td id="coupon_code_str"></td>
+                                                </tr>
                                                 <tr>
                                                     <th>Total</th>
-                                                    <td>Rs {{$totalPrice}}</td>
+                                                    <td id="total_price">Rs {{$totalPrice}}</td>
                                                 </tr>
                                                 </tfoot>
                                             </table>
@@ -158,21 +159,25 @@
                                             </div>
                                             <div id="collapseOne" class="panel-collapse collapse in">
                                                 <div class="panel-body">
-                                                    <input type="text" placeholder="Coupon Code" class="aa-coupon-code">
-                                                    <input type="submit" value="Apply Coupon" class="aa-browse-btn">
+                                                    <input type="text" name="coupon_code" id="coupon_code" placeholder="Coupon Code" class="aa-coupon-code apply_coupon_code w-100">
+                                                    <br><input type="button" name="coupon_code" onclick="applyCouponCode()" value="Apply Coupon" class="aa-browse-btn apply_coupon_code w-100">
+                                                    <div id="coupon_code_msg" style="color: red;"></div>
                                                 </div>
                                             </div>
                                         </div>
                                         <h4>Payment Method</h4>
                                         <div class="aa-payment-method">
-                                            <label for="cashdelivery"><input type="radio" id="cashdelivery" name="optionsRadios"> Cash on Delivery </label>
-                                            <label for="paypal"><input type="radio" id="paypal" name="optionsRadios" checked> Via Paypal </label>
-                                            <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark">
-                                            <input type="submit" value="Place Order" class="aa-browse-btn">
+                                            <label for="cod"><input type="radio" value="COD" id="cod" name="payment_type" checked> Cash on Delivery </label>
+                                            <label for="instamojo"><input type="radio"  value="Gateway" id="instamojo" name="payment_type"> Via Instamojo </label>
+                                            <label for="stripe"><input type="radio"  value="Gateway" id="stripe" name="payment_type"> Via Stripe </label>
+
+                                            <input type="submit" value="Place Order" id="btnPlaceOrder" class="aa-browse-btn">
                                         </div>
+                                        <div id="order_place_msg"></div>
                                     </div>
                                 </div>
                             </div>
+
                         </form>
                     </div>
                 </div>

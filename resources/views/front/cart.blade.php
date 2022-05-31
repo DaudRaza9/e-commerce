@@ -1,6 +1,6 @@
-@extends('front.layouts.layout')
+@extends('front.layouts.master')
 @section('page_title','Cart Page')
-@section('container')
+@section('content')
 
 
     <!-- catg header banner section -->

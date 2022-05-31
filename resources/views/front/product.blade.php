@@ -1,6 +1,6 @@
-@extends('front.layouts.layout')
+@extends('front.layouts.master')
 @section('page_title',$product[0]->name)
-@section('container')
+@section('content')
 
     <!-- product category -->
     <section id="aa-product-details">

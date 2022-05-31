@@ -1,6 +1,6 @@
-@extends('front.layouts.layout')
-@section('page_title','Home Page')
-@section('container')
+@extends('front.layouts.master')
+@section('page_title','Index')
+@section('content')
 
     <!-- Start slider -->
     <section id="aa-slider">

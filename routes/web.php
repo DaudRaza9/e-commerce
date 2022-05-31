@@ -138,12 +138,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::get('/select_home_banner', [HomeBannerController::class, 'selectHomeBanner'])->name('select_banner');
         });
 
-
         Route::group(['prefix' => 'productAttribute', 'as' => 'productAttribute.'], function () {
             Route::get('/delete/{pId}/{pAId}', [ProductAttributeController::class, 'delete'])->name('delete');
         });
-
-
     });
 
 });
@@ -172,3 +169,7 @@ Route::post('/forget_password', [FrontController::class, 'forget_password'])->na
 Route::post('forget_password_change_process', [FrontController::class, 'forget_password_change_process'])->name('forget_password_change_process');
 Route::get('/forget_password_change/{id}', [FrontController::class, 'forget_password_change'])->name('forget_password_change');
 Route::get('/checkout', [FrontController::class, 'checkout'])->name('checkout');
+Route::post('/apply_coupon_code', [FrontController::class, 'applyCouponCode'])->name('apply_coupon_code');
+Route::post('/remove_coupon_code', [FrontController::class, 'remove_coupon_code'])->name('remove_coupon_code');
+Route::post('/place_order', [FrontController::class, 'placeOrder'])->name('place_order');
+Route::get('/order_placed', [FrontController::class, 'orderPlaced'])->name('order_placed');

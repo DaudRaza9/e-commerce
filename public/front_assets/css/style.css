@@ -4235,3 +4235,15 @@ img {
     color: green;
     font-weight: bold;
 }
+#coupon_code_msg{
+    color: red;
+}
+.remove_coupon_code{
+    color: red;
+    font-size: 12px;
+}
+#order_place_msg
+{
+    color: red;
+    font-size: 16px;
+}

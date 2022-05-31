@@ -99,6 +99,7 @@ class CategoryController extends Controller
         }
         $category->category_name  = $request->category_name;
         $category->category_slug  = $request->category_slug;
+        $category->parent_category_id=$request->post('parent_category_id');
 //        $category->status = $category->status;
         $category->update();
         $msg = "Category updated successfully";

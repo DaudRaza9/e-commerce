@@ -77,19 +77,18 @@
                                                         </div>
 
                                                         <div class="row">
-
                                                             <div class="col-md-6">
                                                                 <div class="aa-checkout-single-bill">
                                                                     <input type="text" placeholder="City / Town*"  name="city"  value="{{$customer['city']}}">
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="aa-checkout-single-bill">
                                                                     <input type="text"  name="state" placeholder="state*"  value="{{$customer['state']}}">
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                        <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="aa-checkout-single-bill">
                                                                     <input type="text" placeholder="Postcode / ZIP*" name="zip" value="{{$customer['zip']}}"  >
@@ -168,10 +167,10 @@
                                         <h4>Payment Method</h4>
                                         <div class="aa-payment-method">
                                             <label for="cod"><input type="radio" value="COD" id="cod" name="payment_type" checked> Cash on Delivery </label>
-                                            <label for="instamojo"><input type="radio"  value="Gateway" id="instamojo" name="payment_type"> Via Instamojo </label>
+
                                             <label for="stripe"><input type="radio"  value="Gateway" id="stripe" name="payment_type"> Via Stripe </label>
 
-                                            <input type="submit" value="Place Order" id="btnPlaceOrder" class="aa-browse-btn">
+                                            <input type="submit" value="Place Order" class="aa-browse-btn">
                                         </div>
                                         <div id="order_place_msg"></div>
                                     </div>
@@ -183,7 +182,38 @@
                 </div>
             </div>
         </div>
+
     </section>
-    <!-- / Cart view section -->
+
+
 @endsection
 
+<script>
+    const stripe = Stripe('{{ env('STRIPE_KEY') }}');
+
+    const elements = stripe.elements();
+    const cardElement = elements.create('card');
+
+    cardElement.mount('#card-element');
+
+    const cardHolderName = document.getElementById('card-holder-name');
+    const cardButton = document.getElementById('card-button');
+    const clientSecret = cardButton.dataset.secret;
+
+    cardButton.addEventListener('click', async (e) => {
+        const { setupIntent, error } = await stripe.confirmCardSetup(
+            clientSecret, {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: { name: cardHolderName.value }
+                }
+            }
+        );
+
+        if (error) {
+             jQuery('#order_place_msg').html("Card is not verified");
+        } else {
+            jQuery('#order_place_msg').html("Card is verified");
+        }
+    });
+</script>

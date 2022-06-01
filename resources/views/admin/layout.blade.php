@@ -51,6 +51,10 @@
                         <a href="{{route('admin.dashboard')}}">
                             <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                     </li>
+                    <li class="@yield('order_select')">
+                        <a href="{{route('admin.order.index')}}">
+                            <i class="fas fa-list"></i>Order</a>
+                    </li>
                     <li class="@yield('category_select')">
                         <a href="{{route('admin.category.index')}}">
                             <i class="fas fa-list"></i>Category</a>
@@ -108,6 +112,10 @@
                     <li class="@yield('dashboard_select')">
                         <a href="{{route('admin.dashboard')}}">
                             <i class="fas fa-tachometer-alt"></i>Dashboard</a>
+                    </li>
+                    <li class="@yield('order_select')">
+                        <a href="{{route('admin.order.index')}}">
+                            <i class="fas fa-list"></i>Order</a>
                     </li>
                     <li class="@yield('category_select')">
                         <a href="{{route('admin.category.index')}}">

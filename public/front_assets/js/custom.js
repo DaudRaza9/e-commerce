@@ -664,3 +664,6 @@ jQuery('#frmPlaceOrder').submit(function (e){
     });
 });
 
+function payment() {
+
+}

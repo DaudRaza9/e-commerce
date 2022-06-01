@@ -9,3 +9,4 @@
 <script type="text/javascript" src="{{asset('front_assets/js/slick.js')}}"></script>
 <script type="text/javascript" src="{{asset('front_assets/js/nouislider.js')}}"></script>
 <script src="{{asset('front_assets/js/custom.js')}}"></script>
+<script src="{{asset('front_assets/js/stripe.js')}}"></script>

@@ -173,3 +173,13 @@ Route::post('/apply_coupon_code', [FrontController::class, 'applyCouponCode'])->
 Route::post('/remove_coupon_code', [FrontController::class, 'remove_coupon_code'])->name('remove_coupon_code');
 Route::post('/place_order', [FrontController::class, 'placeOrder'])->name('place_order');
 Route::get('/order_placed', [FrontController::class, 'orderPlaced'])->name('order_placed');
+Route::get('/stripe', [FrontController::class, 'stripe'])->name('stripe');
+Route::post('/stripe-post', [FrontController::class, 'stripePost'])->name('stripe-post');
+Route::get('/success', [FrontController::class, 'success'])->name('success');
+
+
+Route::group(['middleware'=>'user_auth'],function () {
+    Route::get('/order', [FrontController::class, 'order'])->name('order');
+    Route::get('/order_details/{id}', [FrontController::class, 'orderDetails'])->name('order_details');
+
+});

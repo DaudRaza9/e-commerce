@@ -115,7 +115,7 @@
                     </li>
                     <li class="@yield('order_select')">
                         <a href="{{route('admin.order.index')}}">
-                            <i class="fas fa-list"></i>Order</a>
+                            <i class="fab fa-first-order"></i>Order</a>
                     </li>
                     <li class="@yield('category_select')">
                         <a href="{{route('admin.category.index')}}">

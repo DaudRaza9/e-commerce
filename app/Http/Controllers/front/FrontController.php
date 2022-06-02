@@ -665,68 +665,71 @@ class FrontController extends Controller
     public function stripePost(Request $request)
     {
 
-        $stripe=  \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        $stripe = \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
         $uid = $request->session()->get('FRONT_USER_ID');
-         $user = Customer::findorfail($uid);
+        $user = Customer::findorfail($uid);
         $chekout = \Stripe\Checkout\Session::create([
             'payment_method_types' => [
                 'card'
             ],
-            'line_items' =>[[
-                'name'=>$user->name,
-                'amount'=>$request->amount,
-                'currency'=>'INR',
-                'quantity'=>1,
-                'description'=>'Product Payment',
+            'line_items' => [[
+                'name' => $user->name,
+                'amount' => $request->amount,
+                'currency' => 'INR',
+                'quantity' => 1,
+                'description' => 'Product Payment',
             ]],
             'payment_intent_data' => [
                 'setup_future_usage' => 'off_session',
             ],
-            'mode'=>'payment',
-            'success_url'=>'http://local.laravel-ecommerce/success',
-            'cancel_url'=>'http://local.laravel-ecommerce/stripe',
+            'mode' => 'payment',
+            'success_url' => 'http://local.laravel-ecommerce/success',
+            'cancel_url' => 'http://local.laravel-ecommerce/stripe',
         ]);
 
         $user->addPaymentMethod($request->stripeToken);
 
-        return response()->json(['success'=>true,'message','Payment added']);
+        return response()->json(['success' => true, 'message', 'Payment added']);
     }
 
-   public function success(Request $request)
+    public function success(Request $request)
     {
         return view('front.success');
     }
 
-   public function order(Request $request)
+    public function order(Request $request)
     {
 
 
         $result['orders'] = DB::table('orders')
-            ->select('orders.*','order_status.order_status')
-            ->leftJoin('order_status','order_status.id','=','orders.order_status')
-            ->where(['orders.customer_id'=>$request->session()->get('FRONT_USER_ID')])
+            ->select('orders.*', 'order_status.order_status')
+            ->leftJoin('order_status', 'order_status.id', '=', 'orders.order_status')
+            ->where(['orders.customer_id' => $request->session()->get('FRONT_USER_ID')])
             ->get();
 
 
-
-        return view('front.order',$result);
+        return view('front.order', $result);
     }
 
-    public function orderDetails(Request $request,$id)
+    public function orderDetails(Request $request, $id)
     {
-        $result['order_details']=
+        $result['order_details'] =
             DB::table('order_details')
-                ->select('orders.*','order_details.price','order_details.quantity','order_status.order_status',
-                'products.name as pname','product_attributes.attr_image','sizes.size','colors.color')
-            ->leftJoin('orders','orders.id','=','order_details.order_id')
-            ->leftJoin('product_attributes','product_attributes.id','=','order_details.product_attributes_id')
-            ->leftJoin('products','products.id','=','product_attributes.products_id')
+                ->select('orders.*', 'order_details.price', 'order_details.quantity', 'order_status.order_status',
+                    'products.name as pname', 'product_attributes.attr_image', 'sizes.size', 'colors.color')
+                ->leftJoin('orders', 'orders.id', '=', 'order_details.order_id')
+                ->leftJoin('product_attributes', 'product_attributes.id', '=', 'order_details.product_attributes_id')
+                ->leftJoin('products', 'products.id', '=', 'product_attributes.products_id')
                 ->leftJoin('sizes', 'sizes.id', '=', 'product_attributes.size_id')
                 ->leftJoin('colors', 'colors.id', '=', 'product_attributes.color_id')
-                ->leftJoin('order_status','order_status.id','=','orders.order_status')
-                ->where(['orders.id'=>$id])
-            ->get();
-
-        return view('front.order_detail',$result);
+                ->leftJoin('order_status', 'order_status.id', '=', 'orders.order_status')
+                ->where(['orders.id' => $id])
+                ->where(['customer_id' => $request->session()->get('FRONT_USER_ID')])
+                ->get();
+if(!isset($result['order_details'][0]))
+{
+    return redirect('/');
+}
+        return view('front.order_detail', $result);
     }
 }

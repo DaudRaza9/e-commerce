@@ -41,6 +41,8 @@
                         ?>
                        <br>
                     </div>
+                   <b> Track Details </b><br>
+                    {{$order_details[0]->track_details}}
                 </div>
 
                 <div class="col-md-12">

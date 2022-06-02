@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\ProductAttributeController;
@@ -140,6 +141,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
         Route::group(['prefix' => 'productAttribute', 'as' => 'productAttribute.'], function () {
             Route::get('/delete/{pId}/{pAId}', [ProductAttributeController::class, 'delete'])->name('delete');
+        });
+
+        Route::group(['prefix' => 'order', 'as' => 'order.'], function () {
+            Route::get('/', [OrderController::class, 'index'])->name('index');
+            Route::get('/order_detail/{id}', [OrderController::class, 'order_details'])->name('order_detail');
+            Route::post('/order_detail/{id}', [OrderController::class, 'update_track_details']);
+            Route::get('/update_payment_status/{status}/{id}', [OrderController::class, 'update_payment_status'])->name('update_payment_status');
+            Route::get('/update_order_status/{status}/{id}', [OrderController::class, 'update_order_status'])->name('update_order_status');
         });
     });
 

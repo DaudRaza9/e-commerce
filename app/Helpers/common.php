@@ -145,3 +145,28 @@ function apply_coupon_code($coupon_code)
     return json_encode(['status' => $status, 'msg' => $msg, 'totalPrice' => $totalPrice,'coupon_code_value'=>$coupon_code_value]);
 
 }
+
+function getCustomDate($date)
+{
+    if($date!='')
+    {
+        $date=strtotime($date);
+        return date('d-M Y',$date);
+    }
+
+}
+
+function getAvailableQuantity($product_id,$attribute_id)
+{
+
+    $result  = DB::table('order_details')
+        ->leftJoin('orders', 'orders.id', '=', 'order_details.order_id')
+        ->leftJoin('product_attributes', 'product_attributes.id', '=', 'order_details.product_attributes_id')
+        ->where(['order_details.product_id' => $product_id])
+        ->where(['order_details.product_attributes_id' => $attribute_id])
+        ->select('order_details.quantity','product_attributes.quantity as pquantity')
+        ->get();
+
+ return $result;
+
+}

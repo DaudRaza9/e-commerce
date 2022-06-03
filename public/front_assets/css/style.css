@@ -2241,8 +2241,11 @@ img {
 #aa-product-details .aa-product-details-area .aa-product-details-bottom .aa-product-review-area .aa-review-nav li .media-body .media-heading {
   font-size: 16px;
 }
-#aa-product-details .aa-product-details-area .aa-product-details-bottom .aa-product-review-area .aa-review-nav li .media-body .aa-product-rating span {
+#aa-product-details .aa-product-details-area .aa-product-details-bottom .aa-product-review-area .aa-review-nav li .media-body  span {
   color: #ff6600;
+}
+.aa-product-rating{
+    color: #ff6600;
 }
 #aa-product-details .aa-product-details-area .aa-product-details-bottom .aa-review-form {
   margin-top: 20px;
@@ -4273,4 +4276,14 @@ img {
 .order-details-background
 {
     background-color: white;
+}
+.review_msg{
+    color: red;
+    font-size: 18px;
+
+}
+
+.no_review_found
+{
+    color: #ff6666;
 }

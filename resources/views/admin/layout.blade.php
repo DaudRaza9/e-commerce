@@ -55,6 +55,10 @@
                         <a href="{{route('admin.order.index')}}">
                             <i class="fas fa-list"></i>Order</a>
                     </li>
+                    <li class="@yield('product_review_select')">
+                        <a href="{{route('admin.product.review.index')}}">
+                            <i class="fab fa-first-order"></i>Product Review</a>
+                    </li>
                     <li class="@yield('category_select')">
                         <a href="{{route('admin.category.index')}}">
                             <i class="fas fa-list"></i>Category</a>
@@ -116,6 +120,10 @@
                     <li class="@yield('order_select')">
                         <a href="{{route('admin.order.index')}}">
                             <i class="fab fa-first-order"></i>Order</a>
+                    </li>
+                    <li class="@yield('product_review_select')">
+                        <a href="{{route('admin.product.review.index')}}">
+                            <i class="fab fa-first-order"></i>Product Review</a>
                     </li>
                     <li class="@yield('category_select')">
                         <a href="{{route('admin.category.index')}}">

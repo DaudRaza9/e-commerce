@@ -124,15 +124,24 @@ class FrontController extends Controller
                     ->where(['product_attributes.products_id' => $list1->id])
                     ->get();
         }
-//       echo '<pre>';
-//       prx($result);
-//       die();
+
         foreach ($result['product'] as $list1) {
             $result['product_images'][$list1->id] =
                 DB::table('product_images')
                     ->where(['product_images.products_id' => $list1->id])
                     ->get();
         }
+
+        $result['product_review'] =
+            DB::table('product_review')
+                ->leftJoin('customers', 'customers.id', '=', 'product_review.customer_id')
+                ->where(['product_review.product_id' => $result['product'][0]->id])
+                ->where(['product_review.status' => 1])
+               ->orderBy('product_review.id','desc')
+                ->select('product_review.rating','product_review.review','product_review.added_on',
+               'customers.name')
+                ->get();
+
 
         return view('front.product', $result);
     }
@@ -161,6 +170,15 @@ class FrontController extends Controller
             ->get();
 
         $product_attr_id = $result[0]->id;
+//        $getAvailableQuantity = getAvailableQuantity($product_id,$product_attr_id);
+//        prx($getAvailableQuantity);
+//
+//        $finalAvaliable = $getAvailableQuantity[0]->pquantity-$getAvailableQuantity[0]->quantity;
+//        prx($finalAvaliable);
+//        if($productQuantity>$finalAvaliable )
+//        {
+//            return response()->json(['msg' => 'not_available', 'data' => 'only'. $finalAvaliable .'left.']);
+//        }
         $check = DB::table('cart')
             ->where(['user_id' => $uid])
             ->where(['user_type' => $user_type])
@@ -700,13 +718,11 @@ class FrontController extends Controller
     public function order(Request $request)
     {
 
-
         $result['orders'] = DB::table('orders')
             ->select('orders.*', 'order_status.order_status')
             ->leftJoin('order_status', 'order_status.id', '=', 'orders.order_status')
             ->where(['orders.customer_id' => $request->session()->get('FRONT_USER_ID')])
             ->get();
-
 
         return view('front.order', $result);
     }
@@ -726,10 +742,34 @@ class FrontController extends Controller
                 ->where(['orders.id' => $id])
                 ->where(['customer_id' => $request->session()->get('FRONT_USER_ID')])
                 ->get();
-if(!isset($result['order_details'][0]))
-{
-    return redirect('/');
-}
+        if (!isset($result['order_details'][0])) {
+            return redirect('/');
+        }
         return view('front.order_detail', $result);
+    }
+
+    public function product_review_process(Request $request)
+    {
+        if ($request->session()->has('FRONT_USER_LOGIN')) {
+            $uid = $request->session()->get('FRONT_USER_ID');
+            $array=[
+                'rating'=>$request->rating,
+                'review'=>$request->review,
+                'status'=> 1,
+                'product_id'=>$request->product_id,
+                'customer_id'=>$uid,
+                'added_on'=>date('Y-m-d h:i:s')
+            ];
+            $query = DB::table('product_review')->insert($array);
+            $status = "success";
+            $msg = "Thank you for providing your feedback.";
+        }
+        else {
+            $status = "error";
+            $msg = "Please login to submit your review:-";
+        }
+
+        return response()->json(['status' => $status, 'msg' => $msg]);
+
     }
 }

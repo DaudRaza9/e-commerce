@@ -1,19 +1,20 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CustomerController;
-use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\SizeController;
-use App\Http\Controllers\Admin\ProductAttributeController;
-use App\Http\Controllers\Admin\TaxController;
-use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\HomeBannerController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ProductAttributeController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductReviewController;
+use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Front\FrontController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +32,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/', [AdminController::class, 'index']);
     Route::post('/login', [AdminController::class, 'login'])->name('login');
 
-    Route::group(['middleware'=>'admin_auth'],function (){
+    Route::group(['middleware' => 'admin_auth'], function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 
@@ -91,6 +92,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::get('/status/{status}/{id}', [ProductController::class, 'status'])->name('status');
             Route::get('/product_images_delete/{paid}/{pid}', [ProductController::class, 'imageDelete'])->name('imageDelete');
             Route::get('/product_attr_delete/{paid}/{id}', [ProductController::class, 'productAttributeDelete'])->name('productAttributeImageDelete');
+
+            //--Product Review--//
+
+            Route::group(['prefix' => 'review', 'as' => 'review.'], function () {
+                Route::get('/', [ProductReviewController::class, 'index'])->name('index');
+                Route::get('/update_product_review_status/{status}/{id}', [ProductReviewController::class, 'update_product_review_status'])->name('update_product_review_status');
+
+            });
         });
 
         //--Brand Routes--//
@@ -124,7 +133,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::get('/show/{id}', [CustomerController::class, 'show'])->name('show');
             Route::get('/delete/{id}', [CustomerController::class, 'delete'])->name('delete');
             Route::get('/status/{status}/{id}', [CustomerController::class, 'status'])->name('status');
-            });
+        });
 
         //--Home Banner Routes--//
         Route::group(['prefix' => 'home-banner', 'as' => 'home-banner.'], function () {
@@ -185,9 +194,10 @@ Route::get('/order_placed', [FrontController::class, 'orderPlaced'])->name('orde
 Route::get('/stripe', [FrontController::class, 'stripe'])->name('stripe');
 Route::post('/stripe-post', [FrontController::class, 'stripePost'])->name('stripe-post');
 Route::get('/success', [FrontController::class, 'success'])->name('success');
+Route::post('/product_review_process', [FrontController::class, 'product_review_process'])->name('product_review_process');
 
 
-Route::group(['middleware'=>'user_auth'],function () {
+Route::group(['middleware' => 'user_auth'], function () {
     Route::get('/order', [FrontController::class, 'order'])->name('order');
     Route::get('/order_details/{id}', [FrontController::class, 'orderDetails'])->name('order_details');
 
